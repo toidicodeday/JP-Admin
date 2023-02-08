@@ -1,0 +1,16 @@
+// .ant-btn-primary{
+//     background-color: #1677ff!important;
+// }
+.ant-layout .ant-layout-sider{
+    background: #063253;
+    .ant-menu{
+        background: #063253;
+    }
+}
+.ant-layout-sider-trigger {
+    display: none;
+}
+
+.layout__content{
+    min-height: calc(100vh - 9rem);
+}

@@ -1,0 +1,38 @@
+.form-modal {
+  .form-item {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    label {
+      margin-bottom: 6px;
+    }
+    input {
+      border: none;
+      outline: none;
+      color: #000;
+      background-color: #d9d9d9;
+      padding: 8px 20px;
+      border-radius: 10px;
+    }
+  }
+}
+
+body,
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
