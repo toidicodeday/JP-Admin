@@ -14,7 +14,6 @@ type Props = {};
 
 const AppRoutes = (props: Props) => {
   const { isUserLogin } = useReinitSessionLoggedIn();
-  console.log('❌ ~ AppRoutes ~ isUserLogin', isUserLogin)
 
   return (
     <Routes>

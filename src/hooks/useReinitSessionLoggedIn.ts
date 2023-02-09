@@ -14,11 +14,6 @@ const useReinitSessionLoggedIn = () => {
       ? Cookies.get(STORAGE.SESSION_ID)
       : undefined;
 
-  console.log({
-    sessionId,
-    cookieSessionId,
-  });
-
   const isUserLogin = useMemo(
     () => Boolean(sessionId || cookieSessionId),
     [cookieSessionId, sessionId]
