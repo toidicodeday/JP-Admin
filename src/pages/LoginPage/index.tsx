@@ -1,9 +1,11 @@
+import api from "@/services";
 import { useTypedDispatch } from "@/store";
-import { saveAuthToken } from "@/store/authSlice";
+import { saveLoggedInInfo } from "@/store/authSlice";
 import { REQUIRE_MESS } from "@/utils/constants/message.constant";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
+// import api from '@/services'
 
 type Props = {};
 
@@ -12,12 +14,21 @@ const LoginPage = (props: Props) => {
   const dispatch = useTypedDispatch();
 
   const handleLogin = async (values: any) => {
-    dispatch(saveAuthToken({
-      accessToken: 'fsdfsdf',
-      refreshToken: 'nenenene'
-    }))
-    navigate('/')
-  }
+    const loginRes = await api.auth.login({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (loginRes) {
+      await dispatch(
+        saveLoggedInInfo({
+          userId: loginRes.userId,
+          sessionId: loginRes.$id,
+        })
+      );
+      navigate("/");
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center">

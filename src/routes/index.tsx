@@ -8,22 +8,13 @@ import protectedRoutes from "./protected-routes";
 import publicRoutes from "./public-routes";
 import loginRoutes from "./login-routes";
 import MainLayout from "@/components/Layout/MainLayout";
-import useReinitAccessToken from "@/hooks/useReinitAccessToken";
+import useReinitSessionLoggedIn from "@/hooks/useReinitSessionLoggedIn";
 
 type Props = {};
 
 const AppRoutes = (props: Props) => {
-  const { isUserLogin } = useReinitAccessToken();
-
-  // const [getUserMe] = useLazyGetMeQuery();
-
-  // useEffect(() => {
-  //   const updateUserMe = async () => {
-  //     const response = await getUserMe();
-  //     if (response.data?.data.id) dispatch(saveUserInfo(response.data.data));
-  //   };
-  //   if (isLogin) updateUserMe();
-  // }, [dispatch, getUserMe, isLogin]);
+  const { isUserLogin } = useReinitSessionLoggedIn();
+  console.log('❌ ~ AppRoutes ~ isUserLogin', isUserLogin)
 
   return (
     <Routes>

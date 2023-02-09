@@ -48,6 +48,7 @@ export const createProtectedRoute = (
   parent: string = "/",
   isLogin: boolean
 ): any => {
+  console.log('route', route)
   if (!isLogin) {
     return (
       <Route
