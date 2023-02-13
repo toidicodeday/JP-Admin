@@ -8,6 +8,11 @@ export const selectAccessToken = createSelector(
   selectAuthSlice,
   (s) => s.accessToken
 );
+
+export const selectSessionId = createSelector(
+  selectAuthSlice,
+  (s) => s.sessionId
+);
 export const selectRefreshToken = createSelector(
   selectAuthSlice,
   (s) => s.refreshToken

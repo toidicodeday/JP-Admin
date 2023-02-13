@@ -5,5 +5,6 @@ export const checkPath = (path: string) => {
   } else {
     newPath = path;
   }
+
   return newPath;
 };
