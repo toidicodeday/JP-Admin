@@ -1,9 +1,10 @@
 import { Layout } from "antd";
 import LayoutHeader from "./LayoutHeader";
-import LayoutFooter from "./LayoutFooter";
+// import LayoutFooter from "./LayoutFooter";
 import LayoutSidebar from "./LayoutSidebar";
 import LayoutContent from "./LayoutContent";
 import "./style.scss";
+import LayoutFooter from "./LayoutFooter";
 
 const MainLayout = () => {
   return (
@@ -12,8 +13,10 @@ const MainLayout = () => {
         <LayoutSidebar />
         <Layout.Content>
           <LayoutHeader />
-          <LayoutContent />
-          <LayoutFooter />
+          <Layout.Content className="layout_content-wrap">
+            <LayoutContent />
+            <LayoutFooter />
+          </Layout.Content>
         </Layout.Content>
       </Layout>
     </Layout>
