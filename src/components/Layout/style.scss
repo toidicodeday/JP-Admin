@@ -14,3 +14,12 @@
 .layout__content{
     min-height: calc(100vh - 9rem);
 }
+
+.ant-modal .ant-modal-content{
+    padding: 0px;
+}
+.ant-modal-footer{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 22px;
+}

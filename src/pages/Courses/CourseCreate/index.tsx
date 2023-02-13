@@ -1,6 +1,6 @@
 import { Tabs, TabsProps } from 'antd';
 import React from 'react';
-import InfoTab from './Tabs/InfoTabs';
+import InfoTab from './Tabs/InfoTab';
 import LessonTab from './Tabs/LessonTab'
 
 const CourseCreate = () => {

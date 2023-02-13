@@ -1,9 +1,13 @@
 import Dashboard from "@/pages/Dashboard";
 import Courses  from "@/pages/Courses";
-import CourseDetail from "@/pages/Courses/CourseCreate";
+import Account from "@/pages/Account";
 import IRoute from "@/utils/helpers/route.helper";
 import { HomeOutlined } from "@ant-design/icons";
 import CourseCreate from "@/pages/Courses/CourseCreate";
+import { FaBook } from 'react-icons/fa';
+import { ImHome } from 'react-icons/im';
+import { MdAccountCircle } from 'react-icons/md';
+
 
 const routes: IRoute[] = [
   {
@@ -11,14 +15,14 @@ const routes: IRoute[] = [
     key: "dashboard",
     name: "Dashboard",
     component: Dashboard,
-    icon: HomeOutlined,
+    icon: ImHome,
   },
   {
     path: "/courses",
     key: "courses",
     name: "Courses",
     component: Courses,
-    icon: HomeOutlined,
+    icon: FaBook,
     children: [
       {
         path: "/courses-create",
@@ -28,6 +32,13 @@ const routes: IRoute[] = [
         hidden: true,
       },
     ],
+  },
+  {
+    path: "/account",
+    key: "account",
+    name: "Account",
+    component: Account,
+    icon: MdAccountCircle,
   },
 ];
 
