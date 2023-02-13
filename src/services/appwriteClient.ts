@@ -1,3 +1,4 @@
+import { APPWRITE_DATABASE_ID, APPWRITE_ENDPOINT, APPWRITE_PROJECT } from "@/utils/constants/service.constant";
 import { Account, Client, Databases } from "appwrite";
 
 type Nullable<T> = { [K in keyof T]: T[K] | null };
@@ -9,10 +10,9 @@ type SDK_APPWRITE = {
 };
 
 const severInfo = {
-  endpoint: import.meta.env.VITE_APPWRITE_ENDPOINT,
-  project: import.meta.env.VITE_APPWRITE_PROJECT,
-  collectionID: import.meta.env.VITE_APPWRITE_COLLECTION_ID,
-  databaseID: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+  endpoint: APPWRITE_ENDPOINT,
+  project: APPWRITE_PROJECT,
+  databaseID: APPWRITE_DATABASE_ID,
 };
 
 let appwrite = {
