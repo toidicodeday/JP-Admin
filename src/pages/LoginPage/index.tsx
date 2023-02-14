@@ -48,6 +48,7 @@ const LoginPage = (props: Props) => {
         >
           <Input.Password
             iconRender={(visible) =>
+
               visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
             }
           />
