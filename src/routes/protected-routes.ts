@@ -1,5 +1,5 @@
 import Dashboard from "@/pages/Dashboard";
-import Courses  from "@/pages/Courses";
+import Courses from "@/pages/Courses";
 import Account from "@/pages/Account";
 import IRoute from "@/utils/helpers/route.helper";
 import { HomeOutlined } from "@ant-design/icons";
@@ -36,9 +36,10 @@ const routes: IRoute[] = [
   {
     path: "/account",
     key: "account",
-    name: "Account",
+    name: "",
     component: Account,
     icon: MdAccountCircle,
+    hidden: true,
   },
 ];
 

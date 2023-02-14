@@ -3,6 +3,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 import { Row } from "antd";
 import { Outlet } from "react-router-dom";
+import LayoutFooter from "./LayoutFooter";
 
 // type Props = {};
 

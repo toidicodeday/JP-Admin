@@ -42,8 +42,13 @@ const LayoutHeader: React.FC = () => {
     dispatch(loggedOut());
     navigate("/login");
   };
+  const handleAccount = () => {
+    navigate("/account")
+  }
   const dropdownMenu: MenuProps["items"] = [
     { key: "logout", label: "Đăng xuất", onClick: handleLogout },
+    { key: "account", label: "Account Infomation", onClick: handleAccount },
+
   ];
 
   return (

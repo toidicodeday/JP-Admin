@@ -7,23 +7,24 @@ const CourseCreate = () => {
   const onChange = (key: string) => {
     console.log(key);
   };
-  
+
   const items: TabsProps['items'] = [
     {
       key: '1',
       label: `General Infomation`,
-      children: <InfoTab/>,
+      children: <InfoTab />,
     },
     {
       key: '2',
       label: `Lessons`,
-      children: <LessonTab/>,
+      children: <LessonTab />,
+      disabled: true
     },
   ];
   return (
-      <div className="pt-6 px-8 pb-10">
+    <div className="pt-6 px-8 pb-10">
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-      </div>
+    </div>
   );
 }
 

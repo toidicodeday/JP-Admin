@@ -1,31 +1,36 @@
 
-import { Button, Form, Input} from 'antd';
+import { Button, Form, Input } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style.scss'
 
-const InfoTab = () =>{
+const InfoTab = () => {
   const navigate = useNavigate();
-  const handleMoveListCourse = () =>{
+  const [formData, setFormData] = useState({});
+  const handleMoveListCourse = () => {
     navigate('/courses')
+  }
+  const handleFormChange = (changedValues: any, allValues: any) => {
+    console.log('Form values changed:', allValues);
+    setFormData(allValues);
   }
   return (
     <div className='course-info bg-white px-10 pt-12 pb-7'>
-      <Form layout='vertical'>
-      <Form.Item label="Course name" required={true}>
+      <Form layout='vertical' onValuesChange={handleFormChange}>
+        <Form.Item label="Course name" required={true}>
           <Input />
         </Form.Item>
         <Form.Item label="Course Description" required={true}>
           <TextArea rows={4} />
         </Form.Item>
         <div className="flex gap-6">
-        <Form.Item className='flex-1' label="Cost" required={true}>
-          <Input />
-        </Form.Item>
-        <Form.Item className='flex-1' label="Interested" required={true}>
-          <Input />
-        </Form.Item>
+          <Form.Item className='flex-1' label="Cost" required={true}>
+            <Input />
+          </Form.Item>
+          <Form.Item className='flex-1' label="Interested" required={true}>
+            <Input />
+          </Form.Item>
         </div>
         <Form.Item label="Banner" required={true}>
           <Input />
