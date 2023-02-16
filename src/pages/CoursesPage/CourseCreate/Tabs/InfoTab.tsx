@@ -83,7 +83,11 @@ const InfoTab = ({ detailCourse }: Props) => {
         </div>
         <Form.Item name="img" label="Banner" rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}>
           <Input
-            onChange={e => setImg(e.target.value)}
+            onChange={e => {
+              return setTimeout(() => {
+                setImg(e.target.value)
+              }, 2000)
+            }}
           />
         </Form.Item>
         <div

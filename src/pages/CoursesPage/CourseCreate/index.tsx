@@ -1,5 +1,5 @@
 import api from "@/services";
-import { Tabs, TabsProps } from "antd";
+import { message, Tabs, TabsProps } from "antd";
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -9,6 +9,8 @@ import LessonTab from "./Tabs/LessonTab";
 const CourseCreate = () => {
   const location = useLocation();
   const [detailCourse, setDetailCourse] = useState<Models.Document>();
+  const [isloading, setIsLoading] = useState(false)
+  const [isDisable, setIsDisable] = useState(false)
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -16,12 +18,20 @@ const CourseCreate = () => {
   useEffect(() => {
     const getDetailCourse = async () => {
       const documentId = location.pathname.replace("/courses/", "");
-
       if (documentId !== "courses-create") {
+        setIsLoading(true)
+        message.loading("Đang chờ dữ liệu")
         if (documentId) {
           const response = await api.course.getOneCourse(documentId);
-          setDetailCourse(response);
+          if (response) {
+            setDetailCourse(response);
+          } else {
+            setIsLoading(false)
+            message.error("Hiện không có phản hồi")
+          }
         }
+      } else {
+        setIsDisable(true)
       }
     };
     getDetailCourse();
@@ -38,6 +48,7 @@ const CourseCreate = () => {
       key: "2",
       label: `Lessons`,
       children: <LessonTab />,
+      disabled: isDisable
     },
   ];
   return (

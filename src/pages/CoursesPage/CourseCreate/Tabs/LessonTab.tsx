@@ -1,55 +1,13 @@
+import api from '@/services';
 import { DeleteOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import { Models } from 'appwrite';
+import React, { useEffect, useState } from 'react';
 import editImg from '../../../../assets/images/btn-edit.svg'
 import removeImg from '../../../../assets/images/btn-remove.svg'
 import '../style.scss'
 
-
-
-interface LessonData {
-  key: string;
-  lessonName: string;
-}
-
-interface QuestionData {
-  key: string;
-  question: string;
-}
-const lessonData: LessonData[] = [
-  {
-    key: '1',
-    lessonName: 'Lesson 01'
-  },
-  {
-    key: '2',
-    lessonName: 'Lesson 02'
-  },
-  {
-    key: '3',
-    lessonName: 'Lesson 03'
-  },
-  {
-    key: '4',
-    lessonName: 'Lesson 04'
-  },
-]
-
-const questionData: QuestionData[] = [
-  {
-    key: '1',
-    question: 'What is the weather today?'
-  },
-  {
-    key: '2',
-    question: 'What do you like the most?'
-  },
-  {
-    key: '3',
-    question: 'Arrange those words?'
-  },
-]
 
 const formItemLayout = {
   labelCol: {
@@ -73,6 +31,35 @@ const formItemLayoutWithOutLabel = {
 const LessonTab = () => {
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [lessonData, setLessonData] = useState<Models.Document[]>([])
+  const [lessonTotal, setLessonTotal] = useState<number>(0)
+  const [questionData, setQuestionData] = useState<Models.Document[]>([])
+  const [questionTotal, setQuestionTotal] = useState<number>(0)
+
+
+  useEffect(() => {
+    const getLessonList = async () => {
+      const response = await api.lesson.getLessonList()
+      if (response) {
+        console.log(response)
+        setLessonData(response.documents)
+        setLessonTotal(response.total)
+      }
+    }
+    getLessonList()
+  }, [])
+
+  useEffect(() => {
+    const getQuestionList = async () => {
+      const response = await api.question.getQuestionList()
+      if (response) {
+        console.log(response)
+        setQuestionData(response.documents)
+        setQuestionTotal(response.total)
+      }
+    }
+    getQuestionList()
+  }, [])
 
   const showCreateLessonModal = () => {
     setIsLessonModalOpen(true);
@@ -102,28 +89,32 @@ const LessonTab = () => {
     console.log('Received values of form:', values);
   };
 
-  const columnsLesson: ColumnsType<LessonData> = [
+  const columnsLesson: ColumnsType<Models.Document> = [
 
     {
       title: 'Lessons',
-      dataIndex: 'lessonName',
+      dataIndex: 'name',
     },
     {
       title: '',
       key: 'action',
       render: () => (
         <div className='flex justify-end'>
-          <Button onClick={showCreateLessonModal} className='border-0 bg-transparent cursor-pointer mr-1'>
-            <img src={editImg} alt="" />
+          <Button
+            onClick={showCreateLessonModal}
+            type="text"
+            icon={<img src={editImg} alt="" />}>
           </Button>
-          <Button className='border-0 bg-transparent cursor-pointer'>
-            <img src={removeImg} alt="" />
+          <Button
+            type='text'
+            icon={<img src={removeImg} alt="" />}
+          >
           </Button>
         </div>
       ),
     },
   ];
-  const columnsQuestion: ColumnsType<QuestionData> = [
+  const columnsQuestion: ColumnsType<Models.Document> = [
 
     {
       title: 'Questions',
@@ -135,11 +126,16 @@ const LessonTab = () => {
       key: 'action',
       render: () => (
         <div className='flex justify-end'>
-          <Button onClick={showCreateQuestionModal} className='border-0 bg-transparent cursor-pointer mr-1'>
-            <img src={editImg} alt="" />
+          <Button
+            onClick={showCreateQuestionModal}
+            type='text'
+            icon={<img src={editImg} alt="" />}
+          >
           </Button>
-          <Button className='border-0 bg-transparent cursor-pointer'>
-            <img src={removeImg} alt="" />
+          <Button
+            type='text'
+            icon={<img src={removeImg} alt="" />}
+          >
           </Button>
         </div>
       ),
