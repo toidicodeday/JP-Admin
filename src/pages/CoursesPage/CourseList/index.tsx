@@ -42,6 +42,7 @@ const CourseList = () => {
     getDocuments();
   }, [pageNo, pageSize]);
 
+
   const columns: ColumnsType<Models.Document> = [
     {
       title: "Course",
@@ -100,13 +101,13 @@ const CourseList = () => {
     setSearchName(value)
   };
 
-  
+
   const handleMoveCreate = () => {
     console.log("handleMoveCreate");
     navigate('/courses/courses-create')
   }
-  
-  const handleMoveEdit = (record?: Models.Document) => {
+
+  const handleMoveEdit = (record: any) => {
     console.log("handleMoveEdit", record);
     navigate(`/courses/${record?.$id}`);
   };

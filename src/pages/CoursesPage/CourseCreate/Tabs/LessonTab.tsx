@@ -151,7 +151,7 @@ const LessonTab = () => {
     <div className='lessons bg-white pb-52'>
       <Row>
         <Col span={6}>
-          <div className='lesson-left'>
+          <div className='lesson-left px-5 border-r-2'>
             <Table columns={columnsLesson} dataSource={lessonData} />
             <Button onClick={showCreateLessonModal} className='w-full mt-3' type='primary'>Add new lesson</Button>
           </div>
@@ -161,7 +161,7 @@ const LessonTab = () => {
         </Col>
       </Row>
       <Modal okText="Save" className='w-[684px]' open={isLessonModalOpen} onOk={handleLessonOK} onCancel={handleLessonCancle}>
-        <p className='h-14 flex items-center font-bold text-base border border-solid border-[#D0D0D0] px-4'>Create Lesson</p>
+        <p className='h-14 flex items-center font-bold text-base px-4'>Create Lesson</p>
         <Form layout="vertical" className='pt-5 px-8'>
           <Form.Item label="Name *">
             <Input placeholder='Losum ip ....' />
@@ -169,7 +169,7 @@ const LessonTab = () => {
         </Form>
       </Modal>
       <Modal okText="Save" className='w-[684px]' open={isQuestionModalOpen} onOk={handleQuestionOK} onCancel={handleQuestionCancle}>
-        <p className='h-14 flex items-center font-bold text-base border border-solid border-[#D0D0D0] px-4'>Create Question</p>
+        <p className='h-14 flex items-center font-bold text-base px-4'>Create Question</p>
         <Form layout="vertical" className='pt-5 px-8'>
           <Form.Item label="Name" name="name" rules={[{ required: true }]}>
             <Input />

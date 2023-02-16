@@ -45,10 +45,15 @@ const courseServices = {
       );
     return response;
   },
-//   createOneCourse: (data: {
-//   }) => {
-//  appwrite.provider().database.createDocument(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID, ID.unique(), data)
-//   }
+  createOneCourse: async (data: {
+  }) => {
+
+
+    const res = appwrite.provider().database.createDocument(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID, ID.unique(), data)
+
+
+    return res
+  }
 };
 
 export default courseServices;
