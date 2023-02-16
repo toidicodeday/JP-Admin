@@ -1,4 +1,5 @@
-import { Button, Form, Input } from "antd";
+import api from "@/services";
+import { Button, Form, Input, InputNumber, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
@@ -12,15 +13,16 @@ type Props = {
 const InfoTab = ({ detailCourse }: Props) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [img, setImg] = useState(detailCourse?.img)
 
   useEffect(() => {
     console.log("detailCourse in tab info", detailCourse);
     if (detailCourse) {
       form.setFieldsValue({
-        name: detailCourse.name,
-        desc: detailCourse.desc,
-        cost: detailCourse.cost,
-        interested: detailCourse.interested,
+        name: detailCourse?.name,
+        desc: detailCourse?.desc,
+        cost: detailCourse?.cost,
+        interested: detailCourse?.interested,
         img: detailCourse.img
       });
     }
@@ -30,45 +32,69 @@ const InfoTab = ({ detailCourse }: Props) => {
     navigate("/courses");
   };
 
+  const onSubmitFinish = async (values: any) => {
+    const newCourse = await api.course.createOneCourse(values)
+    if (newCourse) {
+      message.info("Thêm thành công")
+      handleMoveListCourse()
+    } else {
+      message.error("Thêm thất bại")
+    }
+  };
+
+  const onSubmitFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
   return (
     <div className="course-info bg-white px-10 pt-12 pb-7">
-      <Form layout="vertical" form={form}>
-        <Form.Item name="name" label="Course name" required={true}>
+      <Form
+        layout="vertical"
+        form={form}
+        onFinish={onSubmitFinish}
+        onFinishFailed={onSubmitFinishFailed}
+      >
+        <Form.Item name="name" label="Course name" rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="desc" label="Course Description" required={true}>
-          <TextArea rows={4} />
+        <Form.Item name="desc" label="Course Description" rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}>
+          <TextArea
+            rows={4} />
         </Form.Item>
         <div className="flex gap-6">
           <Form.Item
             name="cost"
             className="flex-1"
             label="Cost"
-            required={true}
+            rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}
           >
-            <Input />
+            <Input
+            />
           </Form.Item>
           <Form.Item
             name="interested"
             className="flex-1"
             label="Interested"
-            required={true}
+            rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}
           >
-            <Input />
+            <Input
+            />
           </Form.Item>
         </div>
-        <Form.Item name="img" label="Banner" required={true}>
-          <Input />
+        <Form.Item name="img" label="Banner" rules={[{ required: true, message: 'Truong nay khong duoc de trong!' }]}>
+          <Input
+            onChange={e => setImg(e.target.value)}
+          />
         </Form.Item>
         <div
           className="w-[412px] h-[226px] flex items-center justify-center bg-[#EFEFEF] font-bold text-2xl text-[#555]"
           style={{ marginTop: 8 }}
         >
-          No Image Preview
+          <img src={img || detailCourse?.img} className="object-contain w-full h-full" alt="" />
         </div>
         <div className="flex gap-7 justify-center mt-8">
           <Button onClick={handleMoveListCourse}>Cancle</Button>
-          <Button onClick={handleMoveListCourse} type="primary">
+          <Button type="primary" htmlType="submit">
             Save
           </Button>
         </div>

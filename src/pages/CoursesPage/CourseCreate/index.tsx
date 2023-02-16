@@ -27,6 +27,7 @@ const CourseCreate = () => {
     getDetailCourse();
   }, [location.pathname]);
 
+
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -37,7 +38,6 @@ const CourseCreate = () => {
       key: "2",
       label: `Lessons`,
       children: <LessonTab />,
-      disabled: true,
     },
   ];
   return (
