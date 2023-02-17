@@ -1,4 +1,4 @@
-import { loggedOut } from "@/store/authSlice";
+import { loggedOut, saveUserMe } from "@/store/authSlice";
 import { getMenuKeyFromPath } from "@/utils/helpers/menu.helper";
 import { Avatar, Dropdown, Layout, MenuProps } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
@@ -6,13 +6,16 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import avatar from "@images/avatar.svg";
 import routes from "@/routes/protected-routes";
+import { useTypedSelector } from "@/store";
+import { selectUserMe } from "@/store/authSlice/selector";
 
 const LayoutHeader: React.FC = () => {
   const location = useLocation();
   const [activeMenuKey, setActiveMenuKey] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const userMe = useTypedSelector(selectUserMe)
+  
   useEffect(() => {
     const activeMenuKey = getMenuKeyFromPath(routes, location.pathname);
     if (activeMenuKey) setActiveMenuKey(activeMenuKey);
@@ -42,12 +45,12 @@ const LayoutHeader: React.FC = () => {
     dispatch(loggedOut());
     navigate("/login");
   };
-  const handleAccount = () => {
+  const viewAccountInfo = () => {
     navigate("/account")
   }
   const dropdownMenu: MenuProps["items"] = [
-    { key: "logout", label: "Đăng xuất", onClick: handleLogout },
-    { key: "account", label: "Account Infomation", onClick: handleAccount },
+    { key: "account", label: "Account Infomation", onClick: viewAccountInfo },
+    { key: "logout", label: "Đăng xuất", onClick: handleLogout, className: 'text-red-500' },
 
   ];
 
@@ -58,8 +61,8 @@ const LayoutHeader: React.FC = () => {
 
         <Dropdown menu={{ items: dropdownMenu }} trigger={["click"]}>
           <div className="flex items-center gap-3 cursor-pointer">
-            <Avatar src={avatar} size="large" />
-            <p className="text-base">Admin_01</p>
+            <Avatar src={userMe?.prefs.avatar || avatar} size="large" />
+            <p className="text-base">{userMe?.name || 'Anonymous'}</p>
           </div>
         </Dropdown>
       </div>
