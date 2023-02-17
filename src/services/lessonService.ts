@@ -24,6 +24,7 @@ const lessonService = {
         try {
             const response = await appwrite.provider().database.getDocument(APPWRITE_DATABASE_ID, APPWRITE_LESSON_ID, documentId)
             if (response) {
+                console.log("response", response)
                 return response;
             }
         } catch (error: any) {

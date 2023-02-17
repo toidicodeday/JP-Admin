@@ -35,6 +35,8 @@ const LessonTab = () => {
   const [lessonTotal, setLessonTotal] = useState<number>(0)
   const [questionData, setQuestionData] = useState<Models.Document[]>([])
   const [questionTotal, setQuestionTotal] = useState<number>(0)
+  const [formLesson] = Form.useForm()
+  const [formQuestion] = Form.useForm()
 
 
   useEffect(() => {
@@ -61,8 +63,27 @@ const LessonTab = () => {
     getQuestionList()
   }, [])
 
+  //  useEffect(()=>{
+  //    const getOneLesson = async () =>{
+  //     const responese = await api.lesson.getOneLesson()
+  //    }
+  //  }, [])
+
   const showCreateLessonModal = () => {
     setIsLessonModalOpen(true);
+  };
+  const showEditLessonModal = (lessonID: any) => {
+    setIsLessonModalOpen(true);
+    const getOneLesson = async () => {
+      const lessonDetail = await api.lesson.getOneLesson(lessonID)
+      if (lessonDetail) {
+        formLesson.setFieldsValue({
+          lessonName: lessonDetail?.name
+        })
+        console.log("lessonName", lessonDetail?.name)
+      }
+    }
+    getOneLesson()
   };
 
   const handleLessonOK = () => {
@@ -76,6 +97,24 @@ const LessonTab = () => {
   const showCreateQuestionModal = () => {
     setIsQuestionModalOpen(true);
   };
+
+  const showEditQuestionModal = (questionID: string) => {
+    setIsQuestionModalOpen(true);
+    const getOneQuestion = async () => {
+      const questionDetail = await api.question.getOneQuestion(questionID)
+      if (questionDetail) {
+        formQuestion.setFieldsValue({
+          question: questionDetail?.question,
+          type: questionDetail?.type,
+          answers: questionDetail?.answers
+        })
+        console.log(questionDetail)
+        console.log("questionDetail question", questionDetail?.question)
+        console.log("questionDetail type", questionDetail?.type)
+      }
+    };
+    getOneQuestion()
+  }
 
   const handleQuestionOK = () => {
     setIsQuestionModalOpen(false);
@@ -98,10 +137,10 @@ const LessonTab = () => {
     {
       title: '',
       key: 'action',
-      render: () => (
+      render: (text, record) => (
         <div className='flex justify-end'>
           <Button
-            onClick={showCreateLessonModal}
+            onClick={() => showEditLessonModal(record?.$id)}
             type="text"
             icon={<img src={editImg} alt="" />}>
           </Button>
@@ -124,10 +163,10 @@ const LessonTab = () => {
     {
       title: <Button onClick={showCreateQuestionModal} className='float-right' type='primary'>Add questions</Button>,
       key: 'action',
-      render: () => (
+      render: (text, record) => (
         <div className='flex justify-end'>
           <Button
-            onClick={showCreateQuestionModal}
+            onClick={() => showEditQuestionModal(record?.$id)}
             type='text'
             icon={<img src={editImg} alt="" />}
           >
@@ -158,19 +197,19 @@ const LessonTab = () => {
       </Row>
       <Modal okText="Save" className='w-[684px]' open={isLessonModalOpen} onOk={handleLessonOK} onCancel={handleLessonCancle}>
         <p className='h-14 flex items-center font-bold text-base px-4'>Create Lesson</p>
-        <Form layout="vertical" className='pt-5 px-8'>
-          <Form.Item label="Name *">
+        <Form form={formLesson} layout="vertical" className='pt-5 px-8'>
+          <Form.Item name="lessonName" label="Name" rules={[{ required: true, message: 'Bạn phải nhập trường này' }]}>
             <Input placeholder='Losum ip ....' />
           </Form.Item>
         </Form>
       </Modal>
       <Modal okText="Save" className='w-[684px]' open={isQuestionModalOpen} onOk={handleQuestionOK} onCancel={handleQuestionCancle}>
         <p className='h-14 flex items-center font-bold text-base px-4'>Create Question</p>
-        <Form layout="vertical" className='pt-5 px-8'>
-          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+        <Form form={formQuestion} layout="vertical" className='pt-5 px-8'>
+          <Form.Item label="Name" name="question" rules={[{ required: true, message: 'Bạn phải nhập trường này' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Type *">
+          <Form.Item name="type" label="Type">
             <Select>
               <Select.Option value="Read Kanji">Read Kanji</Select.Option>
               <Select.Option value="Read Kanji">Read Kanji</Select.Option>
@@ -184,7 +223,7 @@ const LessonTab = () => {
               {
                 validator: async (_, names) => {
                   if (!names || names.length < 2) {
-                    return Promise.reject(new Error('At least 2 passengers'));
+                    return Promise.reject(new Error('At least 2 answers'));
                   }
                 },
               },
@@ -204,17 +243,18 @@ const LessonTab = () => {
                     </Form.Item>
                     <Form.Item
                       {...field}
+                      name="answers"
                       validateTrigger={['onChange', 'onBlur']}
                       rules={[
                         {
                           required: true,
                           whitespace: true,
-                          message: "Please input passenger's name or delete this field.",
+                          message: "Please input the field.",
                         },
                       ]}
                       noStyle
                     >
-                      <Input placeholder="passenger name" style={{ width: '60%' }} />
+                      <Input placeholder="Enter your answers" style={{ width: '60%' }} />
                     </Form.Item>
                     {fields.length > 0 ? (
                       <DeleteOutlined

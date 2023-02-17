@@ -3,8 +3,9 @@ import {
   APPWRITE_DATABASE_ID,
 } from "@/utils/constants/service.constant";
 import { message } from "antd";
-import { ID, Query } from "appwrite";
+import { ID, Models, Query } from "appwrite";
 import appwrite from "./appwriteClient";
+import { CourseType } from "./commonType";
 
 const courseServices = {
   getCourseList: async ({
@@ -17,7 +18,7 @@ const courseServices = {
     searchName?: string;
   }) => {
     try {
-      const res = await appwrite
+      const res: Models.DocumentList<CourseType> = await appwrite
         .provider()
         .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID, [
           // Query.search('name', 'N3'),
@@ -37,7 +38,7 @@ const courseServices = {
   },
   getOneCourse: async (documentId: string) => {
     try {
-      const response = await appwrite
+      const response: CourseType = await appwrite
         .provider()
         .database.getDocument(
           APPWRITE_DATABASE_ID,
