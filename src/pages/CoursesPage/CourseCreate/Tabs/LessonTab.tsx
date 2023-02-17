@@ -8,7 +8,9 @@ import editImg from '../../../../assets/images/btn-edit.svg'
 import removeImg from '../../../../assets/images/btn-remove.svg'
 import '../style.scss'
 
-
+type Props = {
+  detailCourse: Models.Document | undefined;
+}
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -28,7 +30,7 @@ const formItemLayoutWithOutLabel = {
 };
 
 
-const LessonTab = () => {
+const LessonTab = ({ detailCourse }: Props) => {
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [lessonData, setLessonData] = useState<Models.Document[]>([])
@@ -37,31 +39,41 @@ const LessonTab = () => {
   const [questionTotal, setQuestionTotal] = useState<number>(0)
   const [formLesson] = Form.useForm()
   const [formQuestion] = Form.useForm()
-
+  const [activeLessonID, setActiveLessonID] = useState('')
+  const [lessonLoading, setLessonLoading] = useState(false)
+  const [questionLoading, setQuestionLoading] = useState(false)
 
   useEffect(() => {
     const getLessonList = async () => {
-      const response = await api.lesson.getLessonList()
-      if (response) {
-        console.log(response)
-        setLessonData(response.documents)
-        setLessonTotal(response.total)
+      if (detailCourse) {
+        setLessonLoading(true)
+        const response = await api.lesson.getLessonList(detailCourse?.$id)
+        if (response) {
+          console.log(response)
+          setLessonData(response.documents)
+          setLessonTotal(response.total)
+        }
+        setLessonLoading(false)
       }
     }
     getLessonList()
-  }, [])
+  }, [detailCourse])
 
   useEffect(() => {
     const getQuestionList = async () => {
-      const response = await api.question.getQuestionList()
-      if (response) {
-        console.log(response)
-        setQuestionData(response.documents)
-        setQuestionTotal(response.total)
+      if (activeLessonID) {
+        setQuestionLoading(true)
+        const response = await api.question.getQuestionList(activeLessonID)
+        if (response) {
+          console.log(response)
+          setQuestionData(response.documents)
+          setQuestionTotal(response.total)
+        }
+        setQuestionLoading(false)
       }
     }
     getQuestionList()
-  }, [])
+  }, [activeLessonID])
 
   //  useEffect(()=>{
   //    const getOneLesson = async () =>{
@@ -187,12 +199,27 @@ const LessonTab = () => {
       <Row>
         <Col span={6}>
           <div className='lesson-left px-5 border-r-2'>
-            <Table columns={columnsLesson} dataSource={lessonData} />
+            <Table columns={columnsLesson} dataSource={lessonData} loading={lessonLoading}
+              rowClassName={(record) => {
+                if (activeLessonID === record?.$id) {
+                  return "bg-red-500 hover:bg-red-500 row-active cursor-pointer"
+                } else {
+                  return ''
+                }
+              }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    setActiveLessonID(record.$id)
+                  }, // click row
+                };
+
+              }} />
             <Button onClick={showCreateLessonModal} className='w-full mt-3' type='primary'>Add new lesson</Button>
           </div>
         </Col>
         <Col span={18}>
-          <Table columns={columnsQuestion} dataSource={questionData} />
+          <Table columns={columnsQuestion} dataSource={questionData} loading={questionLoading} />
         </Col>
       </Row>
       <Modal okText="Save" className='w-[684px]' open={isLessonModalOpen} onOk={handleLessonOK} onCancel={handleLessonCancle}>

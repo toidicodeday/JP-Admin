@@ -7,9 +7,11 @@ import { ID, Query } from "appwrite";
 import appwrite from "./appwriteClient";
 
 const questionService = {
-    getQuestionList: async () => {
+    getQuestionList: async (lessonID: string) => {
         try {
-            const response = await appwrite.provider().database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_QUESTION_ID)
+            const response = await appwrite.provider().database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_QUESTION_ID, [
+                Query.equal('lessonID', lessonID)
+            ])
             if (response) {
                 return response
             }

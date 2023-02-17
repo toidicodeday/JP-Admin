@@ -10,13 +10,13 @@ const AccountInfoTabs = () => {
     <div>
       <Form layout='vertical'>
         <Form.Item label="Full Name" required>
-          <Input />
+          <Input placeholder='Enter your name...' />
         </Form.Item>
         <Form.Item label="Email" required>
-          <Input />
+          <Input placeholder='Enter your email...' />
         </Form.Item>
         <Form.Item label="Phone">
-          <Input />
+          <Input placeholder='Enter your phone number...' />
         </Form.Item>
         <div className="flex justify-center">
           <Button onClick={handleSave} className='w-[378px]' type='primary'>Save</Button>

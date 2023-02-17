@@ -47,7 +47,7 @@ const CourseCreate = () => {
     {
       key: "2",
       label: `Lessons`,
-      children: <LessonTab />,
+      children: <LessonTab detailCourse={detailCourse} />,
       disabled: isDisable
     },
   ];
