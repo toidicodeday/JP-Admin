@@ -7,7 +7,6 @@ import { Outlet } from "react-router-dom";
 // type Props = {};
 
 const LayoutContent = () => {
-  console.log('render layout content')
   return (
     <Suspense
       fallback={

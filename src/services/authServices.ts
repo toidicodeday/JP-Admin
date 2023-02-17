@@ -1,3 +1,4 @@
+import { DEFAULT_ERR_MESS } from "@/utils/constants/message.constant";
 import { message } from "antd";
 import appwrite from "./appwriteClient";
 
@@ -16,6 +17,24 @@ const authService = {
   },
   getMe: () => {
     return appwrite.provider().account.get();
+  },
+  updateUserMeName: async ({ name }: { name: string }) => {
+    const response = await appwrite
+      .provider()
+      .account.updateName(name)
+      .then((res) => res)
+      .catch((error) => {
+        message.error(error.message ||  DEFAULT_ERR_MESS);
+      });
+    return response;
+  },
+  updateUserMePref: async (userPrefs: object) => {
+    try {
+      const response = await appwrite.provider().account.updatePrefs(userPrefs);
+      if (response) return response;
+    } catch (error: any) {
+      message.error(error.message || DEFAULT_ERR_MESS);
+    }
   },
 };
 

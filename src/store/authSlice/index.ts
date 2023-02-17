@@ -3,10 +3,9 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "./types";
 import Cookies from "js-cookie";
 import { STORAGE } from "@/utils/constants/storage.constant";
+import { Models } from "appwrite";
 
 const initialState: AuthState = {
-  accessToken: null,
-  refreshToken: null,
   sessionId: null,
   userId: null,
 };
@@ -31,9 +30,15 @@ export const authSlice = createSlice({
       state.userId = null;
       // window.location.replace('/login')
     },
+    saveUserMe: (
+      state,
+      action: PayloadAction<Models.Account<Models.Preferences>>
+    ) => {
+      state.userMe = action.payload
+    }
   },
 });
 
-export const { saveLoggedInInfo, loggedOut } = authSlice.actions;
+export const { saveLoggedInInfo, loggedOut, saveUserMe } = authSlice.actions;
 
 export default authSlice.reducer;
