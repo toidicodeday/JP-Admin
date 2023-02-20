@@ -1,6 +1,6 @@
 import api from '@/services';
 import { DeleteOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { Models } from 'appwrite';
 import React, { useEffect, useState } from 'react';
@@ -43,11 +43,13 @@ const LessonTab = ({ detailCourse }: Props) => {
   const [lessonLoading, setLessonLoading] = useState(false)
   const [questionLoading, setQuestionLoading] = useState(false)
 
+
   useEffect(() => {
     const getLessonList = async () => {
       if (detailCourse) {
         setLessonLoading(true)
         const response = await api.lesson.getLessonList(detailCourse?.$id)
+        console.log("lesson list", response)
         if (response) {
           console.log(response)
           setLessonData(response.documents)
@@ -83,6 +85,9 @@ const LessonTab = ({ detailCourse }: Props) => {
 
   const showCreateLessonModal = () => {
     setIsLessonModalOpen(true);
+    formLesson.setFieldsValue({
+      name: ""
+    })
   };
   const showEditLessonModal = (lessonID: any) => {
     setIsLessonModalOpen(true);
@@ -90,7 +95,7 @@ const LessonTab = ({ detailCourse }: Props) => {
       const lessonDetail = await api.lesson.getOneLesson(lessonID)
       if (lessonDetail) {
         formLesson.setFieldsValue({
-          lessonName: lessonDetail?.name
+          name: lessonDetail?.name
         })
         console.log("lessonName", lessonDetail?.name)
       }
@@ -98,8 +103,16 @@ const LessonTab = ({ detailCourse }: Props) => {
     getOneLesson()
   };
 
-  const handleLessonOK = () => {
-    setIsLessonModalOpen(false);
+  const handleLessonOK = async () => {
+    // setIsLessonModalOpen(false);
+    formLesson.submit()
+    // const newLesson = await api.lesson.createOneLesson(values)
+    // console.log('new lesson', newLesson)
+    // if (newLesson) {
+    //   message.info("Thêm thành công")
+    // } else {
+    //   message.error("Thêm thất bại")
+    // }
   };
 
   const handleLessonCancle = () => {
@@ -108,6 +121,11 @@ const LessonTab = ({ detailCourse }: Props) => {
 
   const showCreateQuestionModal = () => {
     setIsQuestionModalOpen(true);
+    formQuestion.setFieldsValue({
+      question: "",
+      type: "",
+      answers: []
+    })
   };
 
   const showEditQuestionModal = (questionID: string) => {
@@ -130,14 +148,24 @@ const LessonTab = ({ detailCourse }: Props) => {
 
   const handleQuestionOK = () => {
     setIsQuestionModalOpen(false);
+
   };
 
   const handleQuestionCancle = () => {
     setIsQuestionModalOpen(false);
   };
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form:', values);
+  const onLessonFinish = async (values: any) => {
+
+    // console.log({ name: values?.lessonName })
+
+    const newLesson = await api.lesson.createOneLesson({ ...values, courseID: detailCourse?.$id })
+    console.log('new lesson', newLesson)
+    if (newLesson) {
+      message.info("Thêm thành công")
+    } else {
+      message.error("Thêm thất bại")
+    }
   };
 
   const columnsLesson: ColumnsType<Models.Document> = [
@@ -222,10 +250,10 @@ const LessonTab = ({ detailCourse }: Props) => {
           <Table columns={columnsQuestion} dataSource={questionData} loading={questionLoading} />
         </Col>
       </Row>
-      <Modal okText="Save" className='w-[684px]' open={isLessonModalOpen} onOk={handleLessonOK} onCancel={handleLessonCancle}>
+      <Modal okButtonProps={{ htmlType: "submit" }} okText="Add" className='w-[684px]' open={isLessonModalOpen} onOk={handleLessonOK} onCancel={handleLessonCancle}>
         <p className='h-14 flex items-center font-bold text-base px-4'>Create Lesson</p>
-        <Form form={formLesson} layout="vertical" className='pt-5 px-8'>
-          <Form.Item name="lessonName" label="Name" rules={[{ required: true, message: 'Bạn phải nhập trường này' }]}>
+        <Form onFinish={onLessonFinish} form={formLesson} layout="vertical" className='pt-5 px-8'>
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Bạn phải nhập trường này' }]}>
             <Input placeholder='Losum ip ....' />
           </Form.Item>
         </Form>

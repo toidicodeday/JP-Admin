@@ -1,0 +1,138 @@
+[33mcommit 04e5e9d81678959e21b70d635af20faa384b22af[m[33m ([m[1;36mHEAD -> [m[1;32mJP_12[m[33m, [m[1;31morigin/JP_12[m[33m)[m
+Author: “Your <“you@example.com”>
+Date:   Fri Feb 17 17:24:15 2023 +0700
+
+    feat: fix jp_12
+
+[33mcommit f32799b96c3b53aa157af815b94910c65d103d8d[m[33m ([m[1;32mJP-10[m[33m)[m
+Author: “Your <“you@example.com”>
+Date:   Fri Feb 17 14:31:37 2023 +0700
+
+    feat: fix JP_10
+
+[33mcommit 0d349eb82be61400342d7269f79220882b89507a[m
+Merge: 2209dcb fd93600
+Author: “Your <“you@example.com”>
+Date:   Fri Feb 17 10:49:17 2023 +0700
+
+    Merge branch 'master' of git.hisoft.com.vn:hongky-1994/jp-admin into JP_12
+
+[33mcommit 2209dcbd51ef37baacc0ab27eaec768689e2fe25[m
+Author: “Your <“you@example.com”>
+Date:   Thu Feb 16 15:42:49 2023 +0700
+
+    feat: done JP_12
+
+[33mcommit fd9360045da11a3e9cbe5c76c23cab6a8d814b80[m
+Merge: 04e512b a1ea5d1
+Author: Phạm Hồng Kỳ <hongkyhvnh@gmail.com>
+Date:   Thu Feb 16 04:35:44 2023 +0000
+
+    Merge branch 'JP_10' into 'master'
+    
+    feat: done JP_10
+    
+    See merge request hongky-1994/jp-admin!3
+
+[33mcommit a1ea5d142d6f9495fae280362dc2bb93922d67ae[m[33m ([m[1;31morigin/JP_10[m[33m, [m[1;32mJP_10[m[33m)[m
+Author: “Your <“you@example.com”>
+Date:   Thu Feb 16 09:44:08 2023 +0700
+
+    feat: done JP_10
+
+[33mcommit 04e512b5665fe2afc28326291b1d6d0e10a6f76c[m[33m ([m[1;32mJP[m[33m)[m
+Merge: c420e4e cedaee2
+Author: Phạm Hồng Kỳ <hongkyhvnh@gmail.com>
+Date:   Tue Feb 14 10:12:50 2023 +0000
+
+    Merge branch 'JP' into 'master'
+    
+    api jp
+    
+    See merge request hongky-1994/jp-admin!2
+
+[33mcommit cedaee2559f2338ac63ec80196882215133c9634[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Tue Feb 14 17:12:30 2023 +0700
+
+    feat: example appwrite api in course list, and course create
+
+[33mcommit e03b18cb874eda96477fc266932db13d81e56256[m[33m ([m[1;31morigin/JP[m[33m)[m
+Merge: 26d0a90 c420e4e
+Author: “Your <“you@example.com”>
+Date:   Tue Feb 14 14:35:55 2023 +0700
+
+    feat: api jp
+
+[33mcommit c420e4edd8ffe1b9eaeac676798a48488ab41cab[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Mon Feb 13 11:28:20 2023 +0700
+
+    fix: restyle layout
+
+[33mcommit ced696d1a8fc4e59275b861fcd14d861bc658760[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Mon Feb 13 11:17:39 2023 +0700
+
+    fix: add env appwrite
+
+[33mcommit 26d0a90101b9b8944ccec6adabe1b2dac02488e6[m
+Merge: 8f2a27f 16eaf15
+Author: “Your <“you@example.com”>
+Date:   Mon Feb 13 10:08:26 2023 +0700
+
+    Merge branch 'master' of git.hisoft.com.vn:hongky-1994/jp-admin into JP
+
+[33mcommit 8f2a27f9fd149df3b9591bde43e076ffafdf3d4e[m
+Author: “Your <“you@example.com”>
+Date:   Mon Feb 13 09:51:50 2023 +0700
+
+    feat: done jp
+
+[33mcommit 6ba5f5016f7e34f3460c3893ae2f81789a4b22f5[m
+Author: “Your <“you@example.com”>
+Date:   Mon Feb 13 09:50:03 2023 +0700
+
+    feat: done
+
+[33mcommit 16eaf155b3b49e004cce582981df1e9a153ae0ae[m
+Merge: 8eaf3b7 26c27a8
+Author: Phạm Hồng Kỳ <hongkyhvnh@gmail.com>
+Date:   Fri Feb 10 04:05:43 2023 +0000
+
+    Merge branch 'JP' into 'master'
+    
+    feat: done 5 issue
+    
+    See merge request hongky-1994/jp-admin!1
+
+[33mcommit 26c27a83f4d42e1314020dc203cd0ec09ed56954[m
+Merge: ebc7344 8eaf3b7
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Fri Feb 10 11:05:11 2023 +0700
+
+    fix: fix conflict merge
+
+[33mcommit ebc73449c6b3e48eff80a3cc66b6a6bcb494061c[m
+Author: “Your <“you@example.com”>
+Date:   Fri Feb 10 10:19:27 2023 +0700
+
+    feat: done 5 issue
+
+[33mcommit 8eaf3b7b40525ed0fb7802e58bcec638c39d369b[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Thu Feb 9 23:54:20 2023 +0700
+
+    fix: remove console.log
+
+[33mcommit c6d6407fdd68adf428ba753ae5733bfef38791d4[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Thu Feb 9 23:52:17 2023 +0700
+
+    fix: routes and api service
+
+[33mcommit 3dfbd7c4b2bce9c686993000bc6c2d0b98cd702b[m
+Author: kypham <hongkyhvnh@gmail.com>
+Date:   Wed Feb 8 14:14:44 2023 +0700
+
+    feat: project init
