@@ -36,6 +36,19 @@ const lessonService = {
             }
             return null
         }
+    },
+    createOneLesson: async (data: {}) => {
+        try {
+            const res = appwrite.provider().database.createDocument(APPWRITE_DATABASE_ID, APPWRITE_LESSON_ID, ID.unique(), data)
+            if (res) {
+                return res
+            }
+        } catch (error: any) {
+            if ("message" in error) {
+                message.error(error.message)
+            }
+            return null;
+        }
     }
 };
 

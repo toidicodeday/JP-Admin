@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import _ from 'lodash';
 import "../style.scss";
 
+
 type Props = {
   detailCourse: Models.Document | undefined;
 };
@@ -34,6 +35,7 @@ const InfoTab = ({ detailCourse }: Props) => {
   };
 
   const onSubmitFinish = async (values: any) => {
+    console.log(values)
     const newCourse = await api.course.createOneCourse(values)
     if (newCourse) {
       message.info("Thêm thành công")
@@ -100,7 +102,10 @@ const InfoTab = ({ detailCourse }: Props) => {
           className="w-[412px] h-[226px] flex items-center justify-center bg-[#EFEFEF] font-bold text-2xl text-[#555]"
           style={{ marginTop: 8 }}
         >
-          <img src={img || detailCourse?.img} className="object-contain w-full h-full" alt="course-img" />
+          <img
+            src={img || detailCourse?.img}
+            className="object-contain w-full h-full"
+            alt="course-img" />
         </div>
         <div className="flex gap-7 justify-center mt-8">
           <Button onClick={handleMoveListCourse}>Cancle</Button>
