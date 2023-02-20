@@ -23,11 +23,18 @@ const AccountInfoTabs = () => {
   }, [accountInfo, form]);
 
   const onFinish = async (values: { name: string }) => {
+    const loadingId = "loadingId";
+    message.loading({
+      content: "Changing password",
+      key: loadingId,
+      duration: 0,
+    });
     setLoading(true);
     const response = await api.auth.updateUserMeName({ name: values.name });
+    message.destroy(loadingId);
     setLoading(false);
     if (response) {
-      message.success('Update successful!')
+      message.success("Update successful!");
       dispatch(saveUserMe(response));
     }
   };
