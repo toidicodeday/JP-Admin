@@ -11,19 +11,19 @@ const ChangePasswordTabs = () => {
       <Form layout='vertical'>
         <Form.Item label="Old password" required>
           <Input.Password
-            placeholder="input password"
+            placeholder="Enter your old password..."
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
         <Form.Item label="New password" required>
           <Input.Password
-            placeholder="input password"
+            placeholder="Enter your new password..."
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
-        <Form.Item label="Retype new password">
+        <Form.Item label="Retype your new password">
           <Input.Password
-            placeholder="input password"
+            placeholder="Enter your new password..."
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>

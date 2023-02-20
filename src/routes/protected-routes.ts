@@ -26,7 +26,7 @@ const routes: IRoute[] = [
     children: [
       {
         path: "/courses-create",
-        key: "courses detail",
+        key: "courses create",
         name: "Courses Create",
         component: CourseCreate,
         hidden: true,
@@ -34,7 +34,7 @@ const routes: IRoute[] = [
       {
         path: "/:id",
         key: "courses edit",
-        name: "Courses Detail",
+        name: "Courses edit",
         component: CourseCreate,
         hidden: true,
       },

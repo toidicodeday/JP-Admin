@@ -1,12 +1,18 @@
-.course-info{
-    .ant-upload.ant-upload-select{
-        width: 412px!important;
-        height: 226px!important;
+.course-info {
+    .ant-upload.ant-upload-select {
+        width: 412px !important;
+        height: 226px !important;
     }
 }
 
-.lessons{
+.lessons {
     .ant-table-wrapper .ant-table-pagination.ant-pagination {
         display: none;
+    }
+
+
+    .ant-table-wrapper .ant-table-tbody>tr.ant-table-row.row-active:hover>td,
+    .ant-table-wrapper .ant-table-tbody>tr.row-active>td.ant-table-cell-row-hover {
+        background-color: red !important;
     }
 }

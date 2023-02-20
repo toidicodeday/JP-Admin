@@ -6,6 +6,7 @@ import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import { Models } from "appwrite";
 import api from "@/services";
+import { CourseType } from "@/services/commonType";
 const { Search } = Input;
 
 const initPageNo = 1;
@@ -13,7 +14,7 @@ const initPageSize = 5;
 
 const CourseList = () => {
   const navigate = useNavigate();
-  const [dataTable, setDataTable] = useState<Models.Document[]>([]);
+  const [dataTable, setDataTable] = useState<CourseType[]>([]);
   const [totalCourse, setTotalCourse] = useState<number>(0);
   const [pageNo, setPageNo] = useState(initPageNo);
   const [pageSize, setPageSize] = useState(initPageSize);
