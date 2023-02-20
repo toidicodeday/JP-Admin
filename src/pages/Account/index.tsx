@@ -85,6 +85,7 @@ const Account = () => {
         title="Update avatar"
         open={visibleModal}
         onOk={updateUserAvatar}
+        onCancel={() => setVisibleModal(false)}
         okButtonProps={{ loading: loadingAvatar }}
       >
         <Input
