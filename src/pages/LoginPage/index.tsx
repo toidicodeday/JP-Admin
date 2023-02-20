@@ -5,7 +5,6 @@ import { REQUIRE_MESS } from "@/utils/constants/message.constant";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-// import api from '@/services'
 
 type Props = {};
 
@@ -31,32 +30,33 @@ const LoginPage = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h1>Login Page</h1>
-      <Form
-        validateMessages={{ required: REQUIRE_MESS }}
-        layout="vertical"
-        onFinish={handleLogin}
-      >
-        <Form.Item name="email" label="Username" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true }]}
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-96">
+        <p className="mb-5 text-4xl font-bold text-center">Login to JP Admin</p>
+        <Form
+          validateMessages={{ required: REQUIRE_MESS }}
+          layout="vertical"
+          onFinish={handleLogin}
         >
-          <Input.Password
-            iconRender={(visible) =>
-
-              visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
-            }
-          />
-        </Form.Item>
-        <Button type="primary" htmlType="submit" block>
-          Đăng nhập
-        </Button>
-      </Form>
+          <Form.Item name="email" label="Username" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true }]}
+          >
+            <Input.Password
+              iconRender={(visible) =>
+                visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
+              }
+            />
+          </Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Login
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 };
