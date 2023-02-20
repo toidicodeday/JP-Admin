@@ -36,6 +36,15 @@ const authService = {
       message.error(error.message || DEFAULT_ERR_MESS);
     }
   },
+  updateUserMePassword: async (data: { password: string, oldPassword: string}) => {
+    try{
+      const response = await appwrite.provider().account.updatePassword(data.password, data.oldPassword)
+      if (response) return response
+    } catch (error: any){
+      message.error(error.message || DEFAULT_ERR_MESS)
+    }
+  }
+
 };
 
 export default authService;
