@@ -21,9 +21,10 @@ const courseServices = {
       const res: Models.DocumentList<CourseType> = await appwrite
         .provider()
         .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID, [
-          // Query.search('name', 'N3'),
+          ...(searchName ? [Query.search("name", searchName)] : []),
           Query.limit(pageSize),
           Query.offset((pageNo - 1) * pageSize),
+          Query.orderDesc('$updatedAt')
         ]);
       console.log("res", res);
       if (res) {
@@ -50,25 +51,31 @@ const courseServices = {
       }
     } catch (error: any) {
       if ("message" in error) {
-        message.error(error.message)
+        message.error(error.message);
       }
       return null;
     }
   },
-  createOneCourse: async (data: {
-  }) => {
+  createOneCourse: async (data: {}) => {
     try {
-      const res = appwrite.provider().database.createDocument(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID, ID.unique(), data)
+      const res = appwrite
+        .provider()
+        .database.createDocument(
+          APPWRITE_DATABASE_ID,
+          APPWRITE_COURSE_ID,
+          ID.unique(),
+          data
+        );
       if (res) {
-        return res
+        return res;
       }
     } catch (error: any) {
       if ("message" in error) {
-        message.error(error.message)
+        message.error(error.message);
       }
       return null;
     }
-  }
+  },
 };
 
 export default courseServices;

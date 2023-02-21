@@ -31,7 +31,7 @@ const CourseList = () => {
   useEffect(() => {
     const getDocuments = async () => {
       setLoadingTable(true)
-      const response = await api.course.getCourseList({ pageNo, pageSize });
+      const response = await api.course.getCourseList({ pageNo, pageSize, searchName });
       if (response) {
         setDataTable(response.documents);
         setTotalCourse(response.total);
@@ -41,7 +41,7 @@ const CourseList = () => {
     };
 
     getDocuments();
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize, searchName]);
 
 
   const columns: ColumnsType<Models.Document> = [
@@ -133,6 +133,7 @@ const CourseList = () => {
       <div className="pb-52 bg-white">
         <Table
           columns={columns}
+          rowKey={'$id'}
           dataSource={dataTable}
           loading={loadingTable}
           pagination={{
