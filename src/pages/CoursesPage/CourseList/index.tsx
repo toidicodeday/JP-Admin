@@ -1,5 +1,5 @@
 import { Button, Input, message, Popconfirm, Table } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import editImg from "../../../assets/images/btn-edit.svg";
 import removeImg from "../../../assets/images/btn-remove.svg";
 import { ColumnsType } from "antd/es/table";
@@ -21,27 +21,44 @@ const CourseList = () => {
   const [searchName, setSearchName] = useState('')
   const [loadingTable, setLoadingTable] = useState(false)
 
-  const confirmDelete = (course: Models.Document) => {
+  const confirmDelete = async (course: Models.Document) => {
     // TODO [course list] delete coruse not done
-
+    const response = await api.course.deleteOneCourse(course.$id)
+    if (response) {
+      console.log("delete response", response)
+      getDocuments()
+    }
     console.log("confirmDelete", course);
     message.success("Bạn đã xóa 1 bản ghi");
   };
 
-  useEffect(() => {
-    const getDocuments = async () => {
+  const getDocuments = useCallback(
+    async () => {
       setLoadingTable(true)
       const response = await api.course.getCourseList({ pageNo, pageSize, searchName });
       if (response) {
         setDataTable(response.documents);
         setTotalCourse(response.total);
       }
-
       setLoadingTable(false)
-    };
+    },
+    [pageNo, pageSize, searchName]
+  );
 
-    getDocuments();
-  }, [pageNo, pageSize, searchName]);
+
+  useEffect(() => {
+    // const getDocuments = async () => {
+    //   setLoadingTable(true)
+    //   const response = await api.course.getCourseList({ pageNo, pageSize, searchName });
+    //   if (response) {
+    //     setDataTable(response.documents);
+    //     setTotalCourse(response.total);
+    //   }
+    //   setLoadingTable(false)
+    // }
+    getDocuments()
+  }, [pageNo, pageSize, searchName]
+  );
 
 
   const columns: ColumnsType<Models.Document> = [

@@ -76,6 +76,25 @@ const courseServices = {
       return null;
     }
   },
+  deleteOneCourse: async (courseID: any) => {
+    try {
+      const res = appwrite
+        .provider()
+        .database.deleteDocument(
+          APPWRITE_DATABASE_ID,
+          APPWRITE_COURSE_ID,
+          courseID
+        )
+      if (res) {
+        return res;
+      }
+    } catch (error: any) {
+      if ("message" in error) {
+        message.error(error.message);
+      }
+      return null;
+    }
+  }
 };
 
 export default courseServices;
