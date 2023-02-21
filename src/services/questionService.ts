@@ -45,25 +45,6 @@ const questionService = {
             }
             return null
         }
-    },
-    deleteOneLesson: async (questionID: any) => {
-        try {
-            const res = appwrite
-                .provider()
-                .database.deleteDocument(
-                    APPWRITE_DATABASE_ID,
-                    APPWRITE_QUESTION_ID,
-                    questionID
-                )
-            if (res) {
-                return res;
-            }
-        } catch (error: any) {
-            if ("message" in error) {
-                message.error(error.message);
-            }
-            return null;
-        }
     }
 };
 

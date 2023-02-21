@@ -1,6 +1,6 @@
 import api from '@/services';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, message, Modal, Popconfirm, Select, Table } from 'antd';
+import { Button, Checkbox, Form, Input, message, Modal, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { Models } from 'appwrite';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -8,28 +8,15 @@ import editImg from '../../../../assets/images/btn-edit.svg'
 import removeImg from '../../../../assets/images/btn-remove.svg'
 
 type Props = {
-  lessonID: string
+  activeLessonID: string
 }
 
-const QuestionSection = ({ lessonID }: Props) => {
+const QuestionSection = ({ activeLessonID }: Props) => {
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [questionTotal, setQuestionTotal] = useState<number>(0)
   const [questionData, setQuestionData] = useState<Models.Document[]>([])
   const [questionLoading, setQuestionLoading] = useState(false)
   const [formQuestion] = Form.useForm()
-  const confirmDeleteQuestion = async (question: Models.Document) => {
-    // TODO [course list] delete coruse not done
-
-    const response = await api.question.deleteOneLesson(question.$id)
-    if (response) {
-      console.log("delete response", response)
-      getQuestionList(lessonID)
-    }
-    console.log("confirmDelete", question);
-    message.success("Bạn đã xóa 1 bản ghi");
-  };
-
-
   const getQuestionList = useCallback(
     async (lessonID: string) => {
       setQuestionLoading(true)
@@ -42,12 +29,13 @@ const QuestionSection = ({ lessonID }: Props) => {
       }
       setQuestionLoading(false)
     },
-    [lessonID],
+    [],
   );
-
   useEffect(() => {
-    getQuestionList(lessonID)
-  }, [getQuestionList])
+
+
+    getQuestionList(activeLessonID)
+  }, [])
 
 
   const showCreateQuestionModal = () => {
@@ -92,12 +80,12 @@ const QuestionSection = ({ lessonID }: Props) => {
   const handleQuestionFinish = async (values: any) => {
     console.log(values)
     const newQuestion = await api.question.createOneQuestion({
-      ...values, lessonID: lessonID,
+      ...values, lessonID: activeLessonID,
       answers: values.answers.map((item: any) => (JSON.stringify(item)))
     })
     console.log(newQuestion)
 
-    getQuestionList(lessonID)
+    getQuestionList(activeLessonID)
     if (newQuestion) {
       message.info("Thêm thành công")
     } else {
@@ -123,15 +111,11 @@ const QuestionSection = ({ lessonID }: Props) => {
             icon={<img src={editImg} alt="" />}
           >
           </Button>
-          <Popconfirm
-            title="Xóa câu hỏi này?"
-            description="Bạn có muốn xóa câu hỏi này không?"
-            onConfirm={() => confirmDeleteQuestion(record)}
-            okText="Có"
-            cancelText="Không"
+          <Button
+            type='text'
+            icon={<img src={removeImg} alt="" />}
           >
-            <Button type="text" icon={<img src={removeImg} alt="" />} />
-          </Popconfirm>
+          </Button>
         </div>
       ),
     },

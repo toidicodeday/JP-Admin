@@ -1,9 +1,9 @@
 import api from '@/services';
 
-import { Button, Col, Form, Input, message, Modal, Popconfirm, Row, Table } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { Models } from 'appwrite';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QuestionSection from './QuestionSection';
 import editImg from '../../../../assets/images/btn-edit.svg'
 import removeImg from '../../../../assets/images/btn-remove.svg'
@@ -40,19 +40,8 @@ const LessonTab = ({ detailCourse }: Props) => {
   const [lessonLoading, setLessonLoading] = useState(false)
 
 
-  const confirmDeleteLesson = async (lesson: Models.Document) => {
-    // TODO [course list] delete coruse not done
-    const response = await api.lesson.deleteOneLesson(activeLessonID)
-    if (response) {
-      console.log("delete response", response)
-      getLessonList()
-    }
-    console.log("confirmDelete", lesson);
-    message.success("Bạn đã xóa 1 bản ghi");
-  };
-
-  const getLessonList = useCallback(
-    async () => {
+  useEffect(() => {
+    const getLessonList = async () => {
       if (detailCourse) {
         setLessonLoading(true)
         const response = await api.lesson.getLessonList(detailCourse?.$id)
@@ -64,13 +53,7 @@ const LessonTab = ({ detailCourse }: Props) => {
         }
         setLessonLoading(false)
       }
-    },
-    [detailCourse]
-  );
-
-
-  useEffect(() => {
-
+    }
     getLessonList()
   }, [detailCourse])
 
@@ -101,7 +84,7 @@ const LessonTab = ({ detailCourse }: Props) => {
   };
 
   const handleLessonOK = async () => {
-    setIsLessonModalOpen(false);
+    // setIsLessonModalOpen(false);
     formLesson.submit()
     // const newLesson = await api.lesson.createOneLesson(values)
     // console.log('new lesson', newLesson)
@@ -122,7 +105,6 @@ const LessonTab = ({ detailCourse }: Props) => {
     // console.log({ name: values?.lessonName })
 
     const newLesson = await api.lesson.createOneLesson({ ...values, courseID: detailCourse?.$id })
-    getLessonList()
     console.log('new lesson', newLesson)
     if (newLesson) {
       message.info("Thêm thành công")
@@ -147,15 +129,11 @@ const LessonTab = ({ detailCourse }: Props) => {
             type="text"
             icon={<img src={editImg} alt="" />}>
           </Button>
-          <Popconfirm
-            title="Xóa bài học này?"
-            description="Bạn có muốn xóa bài học này không?"
-            onConfirm={() => confirmDeleteLesson(record)}
-            okText="Có"
-            cancelText="Không"
+          <Button
+            type='text'
+            icon={<img src={removeImg} alt="" />}
           >
-            <Button type="text" icon={<img src={removeImg} alt="" />} />
-          </Popconfirm>
+          </Button>
         </div>
       ),
     },
@@ -195,7 +173,7 @@ const LessonTab = ({ detailCourse }: Props) => {
           </div>
         </Col>
         <Col span={18}>
-          <QuestionSection lessonID={activeLessonID} />
+          <QuestionSection activeLessonID={activeLessonID} />
         </Col>
       </Row>
 
