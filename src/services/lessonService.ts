@@ -49,6 +49,25 @@ const lessonService = {
             }
             return null;
         }
+    },
+    deleteOneLesson: async (lessonID: any) => {
+        try {
+            const res = appwrite
+                .provider()
+                .database.deleteDocument(
+                    APPWRITE_DATABASE_ID,
+                    APPWRITE_LESSON_ID,
+                    lessonID
+                )
+            if (res) {
+                return res;
+            }
+        } catch (error: any) {
+            if ("message" in error) {
+                message.error(error.message);
+            }
+            return null;
+        }
     }
 };
 
