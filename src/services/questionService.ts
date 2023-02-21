@@ -32,6 +32,19 @@ const questionService = {
                 message.error(error.message)
             }
         }
+    },
+    createOneQuestion: async (data: {}) => {
+        try {
+            const response = await appwrite.provider().database.createDocument(APPWRITE_DATABASE_ID, APPWRITE_QUESTION_ID, ID.unique(), data)
+            if (response) {
+                return response
+            }
+        } catch (error: any) {
+            if ("message" in error) {
+                message.error(error.message)
+            }
+            return null
+        }
     }
 };
 
