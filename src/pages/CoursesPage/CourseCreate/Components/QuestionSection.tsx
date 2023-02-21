@@ -35,7 +35,7 @@ const QuestionSection = ({ activeLessonID }: Props) => {
 
 
     getQuestionList(activeLessonID)
-  }, [activeLessonID])
+  }, [])
 
 
   const showCreateQuestionModal = () => {
