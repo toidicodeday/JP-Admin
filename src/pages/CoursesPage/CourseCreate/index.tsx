@@ -3,8 +3,8 @@ import { message, Tabs, TabsProps } from "antd";
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import InfoTab from "./Tabs/InfoTab";
-import LessonTab from "./Tabs/LessonTab";
+import InfoTab from "./Components/InfoTab";
+import LessonTab from "./Components/LessonSection";
 
 const CourseCreate = () => {
   const location = useLocation();

@@ -17,6 +17,7 @@ const InfoTab = ({ detailCourse }: Props) => {
   const navigate = useNavigate();
   const [img, setImg] = useState(detailCourse?.img)
 
+
   useEffect(() => {
     console.log("detailCourse in tab info", detailCourse);
     if (detailCourse) {
@@ -35,8 +36,8 @@ const InfoTab = ({ detailCourse }: Props) => {
   };
 
   const onSubmitFinish = async (values: any) => {
-    console.log(values)
-    const newCourse = await api.course.createOneCourse(values)
+    console.log(values.cost.toString())
+    const newCourse = await api.course.createOneCourse({ ...values, cost: values.cost.toString() })
     if (newCourse) {
       message.info("Thêm thành công")
       handleMoveListCourse()
