@@ -18,7 +18,12 @@ const Account = () => {
   const [loadingAvatar, setLoadingAvatar] = useState(false);
 
   useEffect(() => {
-    setAvatar(accountInfo?.prefs?.avatar);
+    if (accountInfo?.prefs?.avatar) {
+      const userAvatar = api.file.previewImage(accountInfo?.prefs?.avatar);
+      setAvatar(userAvatar.href || accountImg);
+    } else {
+      setAvatar(accountImg);
+    }
   }, [accountInfo?.prefs?.avatar]);
 
   const items: TabsProps["items"] = [
@@ -34,19 +39,20 @@ const Account = () => {
     },
   ];
 
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [avatarInputText, setAvatarInputText] = useState("");
-  const updateUserAvatar = async () => {
+  const onUpdateUserAvatar = async (file: File) => {
     setLoadingAvatar(true);
-    const response = await api.auth.updateUserMePref({
-      avatar: avatarInputText,
-    });
-    setLoadingAvatar(false);
-    setVisibleModal(false);
+    const response = await api.file.uploadImage(file);
+
     if (response) {
-      message.success("Update avatar successful!");
-      dispatch(saveUserMe(response));
+      const responseAvatar = await api.auth.updateUserMePref({
+        avatar: response.$id,
+      });
+      if (responseAvatar) {
+        message.success("Update avatar successful!");
+        dispatch(saveUserMe(responseAvatar));
+      }
     }
+    setLoadingAvatar(false);
   };
 
   return (
@@ -54,17 +60,20 @@ const Account = () => {
       <div className="bg-white">
         <div className="flex justify-center">
           <Spin spinning={loadingAvatar}>
-            <div
-              className="group mt-9 mb-12 rounded-full cursor-pointer"
-              onClick={() => {
-                if (!loadingAvatar) {
-                  setVisibleModal(true);
-                  setAvatarInputText(avatar || "");
-                }
-              }}
-            >
+            <label className=" w-44 h-44 block group mt-9 mb-12 rounded-full cursor-pointer border border-solid border-slate-100">
+              <input
+                type="file"
+                value=""
+                accept="image/*"
+                hidden
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    onUpdateUserAvatar(e.target.files[0]);
+                  }
+                }}
+              />
               <img
-                className="w-44 h-44 object-cover rounded-full"
+                className="w-full h-full object-cover rounded-full "
                 src={avatar || accountImg}
                 alt=""
                 onLoadStart={() => setLoadingAvatar(true)}
@@ -74,25 +83,13 @@ const Account = () => {
               <div className="group-hover:opacity-100 opacity-0 bg-slate-500/40 w-44 h-44 absolute top-0 left-0 rounded-full flex justify-center items-center">
                 <RiEditBoxFill className="text-white text-3xl" />
               </div>
-            </div>
+            </label>
           </Spin>
         </div>
         <div className="px-12 pb-52">
           <Tabs defaultActiveKey="accountInfo" items={items} />
         </div>
       </div>
-      <Modal
-        title="Update avatar"
-        open={visibleModal}
-        onOk={updateUserAvatar}
-        onCancel={() => setVisibleModal(false)}
-        okButtonProps={{ loading: loadingAvatar }}
-      >
-        <Input
-          value={avatarInputText}
-          onChange={(e) => setAvatarInputText(e.target.value)}
-        />
-      </Modal>
     </div>
   );
 };

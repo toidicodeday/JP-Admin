@@ -1,4 +1,4 @@
-import { loggedOut, saveUserMe } from "@/store/authSlice";
+import { loggedOut } from "@/store/authSlice";
 import { getMenuKeyFromPath } from "@/utils/helpers/menu.helper";
 import { Avatar, Dropdown, Layout, MenuProps } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
@@ -8,14 +8,29 @@ import avatar from "@images/avatar.svg";
 import routes from "@/routes/protected-routes";
 import { useTypedSelector } from "@/store";
 import { selectUserMe } from "@/store/authSlice/selector";
+import api from "@/services";
 
 const LayoutHeader: React.FC = () => {
   const location = useLocation();
   const [activeMenuKey, setActiveMenuKey] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userMe = useTypedSelector(selectUserMe)
-  
+  const userMe = useTypedSelector(selectUserMe);
+  const [userAvatar, setUserAvatar] = useState<string>();
+
+  useEffect(() => {
+    if (userMe?.prefs.avatar) {
+      const resAvatar = api.file.previewImage(userMe.prefs.avatar);
+      if (resAvatar) {
+        setUserAvatar(resAvatar.href);
+      } else {
+        setUserAvatar(avatar);
+      }
+    } else {
+      setUserAvatar(avatar);
+    }
+  }, [userMe?.prefs?.avatar]);
+
   useEffect(() => {
     const activeMenuKey = getMenuKeyFromPath(routes, location.pathname);
     if (activeMenuKey) setActiveMenuKey(activeMenuKey);
@@ -46,12 +61,16 @@ const LayoutHeader: React.FC = () => {
     navigate("/login");
   };
   const viewAccountInfo = () => {
-    navigate("/account")
-  }
+    navigate("/account");
+  };
   const dropdownMenu: MenuProps["items"] = [
     { key: "account", label: "Account Infomation", onClick: viewAccountInfo },
-    { key: "logout", label: "Đăng xuất", onClick: handleLogout, className: 'text-red-500' },
-
+    {
+      key: "logout",
+      label: "Đăng xuất",
+      onClick: handleLogout,
+      className: "text-red-500",
+    },
   ];
 
   return (
@@ -61,8 +80,8 @@ const LayoutHeader: React.FC = () => {
 
         <Dropdown menu={{ items: dropdownMenu }} trigger={["click"]}>
           <div className="flex items-center gap-3 cursor-pointer">
-            <Avatar src={userMe?.prefs.avatar || avatar} size="large" />
-            <p className="text-base">{userMe?.name || 'Anonymous'}</p>
+            <Avatar src={userAvatar} size="large" className="border-slate-100" />
+            <p className="text-base">{userMe?.name || "Anonymous"}</p>
           </div>
         </Dropdown>
       </div>
