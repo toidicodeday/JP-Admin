@@ -18,50 +18,50 @@ const CourseList = () => {
   const [totalCourse, setTotalCourse] = useState<number>(0);
   const [pageNo, setPageNo] = useState(initPageNo);
   const [pageSize, setPageSize] = useState(initPageSize);
-  const [searchName, setSearchName] = useState('')
-  const [loadingTable, setLoadingTable] = useState(false)
+  const [searchName, setSearchName] = useState("");
+  const [loadingTable, setLoadingTable] = useState(false);
 
-  const confirmDelete = async (course: Models.Document) => {
-    // TODO [course list] delete coruse not done
-    const response = await api.course.deleteOneCourse(course.$id)
+  const confirmDelete = async (course: CourseType) => {
+    const response = await api.course.deleteOneCourse(course.$id);
     if (response) {
-      console.log("delete response", response)
-      getDocuments()
+      message.success("Delete successful");
+      getDocuments();
     }
-    console.log("confirmDelete", course);
-    message.success("Bạn đã xóa 1 bản ghi");
   };
 
-  const getDocuments = useCallback(
-    async () => {
-      setLoadingTable(true)
-      const response = await api.course.getCourseList({ pageNo, pageSize, searchName });
-      if (response) {
-        setDataTable(response.documents);
-        setTotalCourse(response.total);
-      }
-      setLoadingTable(false)
-    },
-    [pageNo, pageSize, searchName]
-  );
-
+  const getDocuments = useCallback(async () => {
+    setLoadingTable(true);
+    const response = await api.course.getCourseList({
+      pageNo,
+      pageSize,
+      searchName,
+    });
+    if (response) {
+      setDataTable(response.documents);
+      setTotalCourse(response.total);
+    }
+    setLoadingTable(false);
+  }, [pageNo, pageSize, searchName]);
 
   useEffect(() => {
-    // const getDocuments = async () => {
-    //   setLoadingTable(true)
-    //   const response = await api.course.getCourseList({ pageNo, pageSize, searchName });
-    //   if (response) {
-    //     setDataTable(response.documents);
-    //     setTotalCourse(response.total);
-    //   }
-    //   setLoadingTable(false)
-    // }
-    getDocuments()
-  }, [pageNo, pageSize, searchName]
-  );
+    getDocuments();
+  }, [getDocuments]);
 
+  const onSearch = (value: string) => {
+    // TODO [course list] missing search name
 
-  const columns: ColumnsType<Models.Document> = [
+    setSearchName(value);
+  };
+
+  const handleMoveCreate = () => {
+    navigate("/courses/courses-create");
+  };
+
+  const handleMoveEdit = (record: any) => {
+    navigate(`/courses/${record?.$id}`);
+  };
+
+  const columns: ColumnsType<CourseType> = [
     {
       title: "Course",
       dataIndex: "course",
@@ -100,11 +100,11 @@ const CourseList = () => {
             icon={<img src={editImg} alt="" />}
           />
           <Popconfirm
-            title="Xóa bản ghi này"
-            description="Bạn có muốn xóa bản ghi này không?"
+            title="Delete Course"
+            description="Are you sure to delete this item?"
             onConfirm={() => confirmDelete(record)}
-            okText="Có"
-            cancelText="Không"
+            okText="Yes"
+            cancelText="No"
           >
             <Button type="text" icon={<img src={removeImg} alt="" />} />
           </Popconfirm>
@@ -112,25 +112,6 @@ const CourseList = () => {
       ),
     },
   ];
-
-  const onSearch = (value: string) => {
-    // TODO [course list] missing search name
-
-    setSearchName(value)
-  };
-
-
-  const handleMoveCreate = () => {
-    console.log("handleMoveCreate");
-    navigate('/courses/courses-create')
-  }
-
-  const handleMoveEdit = (record: any) => {
-    console.log("handleMoveEdit", record);
-    navigate(`/courses/${record?.$id}`);
-  };
-
-
 
   return (
     <div className="pt-6 px-8 pb-10">
@@ -150,7 +131,7 @@ const CourseList = () => {
       <div className="pb-52 bg-white">
         <Table
           columns={columns}
-          rowKey={'$id'}
+          rowKey={"$id"}
           dataSource={dataTable}
           loading={loadingTable}
           pagination={{

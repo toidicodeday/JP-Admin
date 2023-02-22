@@ -1,16 +1,16 @@
 import api from "@/services";
-import { message, Tabs, TabsProps } from "antd";
+import { message, Spin, Tabs, TabsProps } from "antd";
 import { Models } from "appwrite";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import InfoTab from "./Components/InfoTab";
-import LessonTab from "./Components/LessonSection";
+import InfoTab from "./components/InfoTab";
+import LessonTab from "./components/LessonSection";
 
 const CourseCreate = () => {
   const location = useLocation();
   const [detailCourse, setDetailCourse] = useState<Models.Document>();
-  const [isloading, setIsLoading] = useState(false)
-  const [isDisable, setIsDisable] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisableLessonTab, setIsDisableLessonTab] = useState(false);
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -18,42 +18,38 @@ const CourseCreate = () => {
   useEffect(() => {
     const getDetailCourse = async () => {
       const documentId = location.pathname.replace("/courses/", "");
-      if (documentId !== "courses-create") {
-        setIsLoading(true)
-        message.loading("Đang chờ dữ liệu")
-        if (documentId) {
-          const response = await api.course.getOneCourse(documentId);
-          if (response) {
-            setDetailCourse(response);
-          } else {
-            setIsLoading(false)
-            message.error("Hiện không có phản hồi")
-          }
+      if (documentId && documentId !== "courses-create") {
+        setIsLoading(true);
+        const response = await api.course.getOneCourse(documentId);
+        if (response) {
+          setDetailCourse(response);
         }
-      } else {
-        setIsDisable(true)
+        setIsLoading(false);
+      } else if (documentId === "course-create") {
+        setIsDisableLessonTab(true);
       }
     };
     getDetailCourse();
   }, [location.pathname]);
 
-
   const items: TabsProps["items"] = [
     {
-      key: "1",
+      key: "info",
       label: `General Infomation`,
       children: <InfoTab detailCourse={detailCourse} />,
     },
     {
-      key: "2",
+      key: "lesson",
       label: `Lessons`,
       children: <LessonTab detailCourse={detailCourse} />,
-      disabled: isDisable
+      disabled: isDisableLessonTab,
     },
   ];
   return (
     <div className="pt-6 px-8 pb-10">
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Spin spinning={isLoading}>
+        <Tabs defaultActiveKey="info" items={items} onChange={onChange} />
+      </Spin>
     </div>
   );
 };

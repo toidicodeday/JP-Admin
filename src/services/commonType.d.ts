@@ -13,8 +13,8 @@ export type CourseType = {
 } & Models.Document
 
 export type LessonType = {
-
-}
+  name: string
+} & Models.Document
 
 export type QuestionType = {
 
