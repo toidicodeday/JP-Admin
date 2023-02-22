@@ -17,5 +17,8 @@ export type LessonType = {
 } & Models.Document
 
 export type QuestionType = {
-
-}
+  question: string
+  lessonID: string
+  type: string
+  answers: string
+} & Models.Document
