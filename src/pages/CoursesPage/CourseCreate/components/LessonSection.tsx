@@ -23,7 +23,9 @@ const LessonTab = ({ detailCourse }: Props) => {
   const [activeLessonID, setActiveLessonID] = useState("");
   const [lessonLoading, setLessonLoading] = useState(false);
   const [modalType, setModalType] = useState<"create" | "edit">("create");
- 
+  const [modalButtonText, setModalButtonText] = useState('Add')
+  const [lessonIdEdit, setLessonIdEdit] = useState('')
+
 
   const getLessonList = useCallback(async () => {
     if (detailCourse) {
@@ -43,14 +45,16 @@ const LessonTab = ({ detailCourse }: Props) => {
 
   const showCreateLessonModal = () => {
     setIsLessonModalOpen(true);
-    setModalTitle("Create Lesson");
+    setModalType("create");
+    setModalButtonText("Add")
     formLesson.setFieldsValue({
       name: "",
     });
   };
   const showEditLessonModal = (lessonID: any) => {
     setIsLessonModalOpen(true);
-    setModalTitle("Edit Lesson");
+    setModalType("edit");
+    setModalButtonText("Save")
     const getOneLesson = async () => {
       const lessonDetail = await api.lesson.getOneLesson(lessonID);
       if (lessonDetail) {
@@ -78,6 +82,7 @@ const LessonTab = ({ detailCourse }: Props) => {
         ...values,
         courseID: detailCourse?.$id,
       });
+      console.log("newLesson", newLesson)
       if (newLesson) {
         message.info("Create lesson successful");
         getLessonList();
@@ -86,7 +91,13 @@ const LessonTab = ({ detailCourse }: Props) => {
     }
 
     if (modalType === 'edit') {
-      //
+
+      const newLesson = await api.lesson.updateOneLesson(lessonIdEdit, values)
+      if (newLesson) {
+        message.info("Update lesson successful")
+        getLessonList();
+        setIsLessonModalOpen(false)
+      }
     }
   };
 
@@ -108,6 +119,7 @@ const LessonTab = ({ detailCourse }: Props) => {
     });
   };
 
+
   const columnsLesson: ColumnsType<LessonType> = [
     {
       title: "Lessons",
@@ -122,6 +134,7 @@ const LessonTab = ({ detailCourse }: Props) => {
             onClick={(e) => {
               e.stopPropagation();
               showEditLessonModal(record?.$id);
+              setLessonIdEdit(record.$id)
             }}
             type="text"
             icon={<img src={editImg} alt="" />}
@@ -150,7 +163,7 @@ const LessonTab = ({ detailCourse }: Props) => {
               loading={lessonLoading}
               rowClassName={(record) => {
                 if (activeLessonID === record?.$id) {
-                  return "bg-red-500 hover:bg-red-500 row-active cursor-pointer";
+                  return "bg-[#bdc3c7] hover:bg-[#bdc3c7] row-active cursor-pointer";
                 } else {
                   return "";
                 }
@@ -170,7 +183,7 @@ const LessonTab = ({ detailCourse }: Props) => {
             </Button>
             <Modal
               okButtonProps={{ htmlType: "submit" }}
-              okText="Add"
+              okText={modalButtonText}
               className="w-[684px]"
               open={isLessonModalOpen}
               onOk={handleLessonOK}
@@ -195,7 +208,7 @@ const LessonTab = ({ detailCourse }: Props) => {
           </div>
         </Col>
         <Col span={18}>
-          <QuestionSection activeLessonID={activeLessonID} />
+          <QuestionSection lessonID={activeLessonID} />
         </Col>
       </Row>
     </div>

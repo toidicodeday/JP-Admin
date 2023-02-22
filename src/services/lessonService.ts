@@ -84,6 +84,26 @@ const lessonService = {
       return null;
     }
   },
+  updateOneLesson: async (lessonID: any, data: {}) => {
+    try {
+      const res = appwrite
+        .provider()
+        .database.updateDocument(
+          APPWRITE_DATABASE_ID,
+          APPWRITE_LESSON_ID,
+          lessonID,
+          data
+        );
+      if (res) {
+        return res
+      }
+    } catch (error: any) {
+      if ("message" in error) {
+        message.error(error.message);
+      }
+      return null;
+    }
+  }
 };
 
 export default lessonService;
