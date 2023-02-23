@@ -39,7 +39,7 @@ const InfoTab = ({ detailCourse }: Props) => {
 
   const onSubmitFinish = async (values: any) => {
     if (detailCourse?.$id) {
-      const newCourse = await api.course.upDateOneCourse(detailCourse.$id, { ...values, documentID: '', img })
+      const newCourse = await api.course.upDateOneCourse(detailCourse.$id, { ...values, documentID: '', img, cost: values.cost.toString() })
       if (newCourse) {
         message.info("Update course successful")
         handleMoveListCourse();
