@@ -37,14 +37,14 @@ const courseServices = {
       return null;
     }
   },
-  getOneCourse: async (documentId: string) => {
+  getOneCourse: async (documentID: string) => {
     try {
       const response: CourseType = await appwrite
         .provider()
         .database.getDocument(
           APPWRITE_DATABASE_ID,
           APPWRITE_COURSE_ID,
-          documentId
+          documentID
         );
       if (response) {
         return response;
@@ -76,7 +76,7 @@ const courseServices = {
       return null;
     }
   },
-  deleteOneCourse: async (courseID: any) => {
+  deleteOneCourse: async (courseID: string) => {
     try {
       const res = appwrite
         .provider()
@@ -84,6 +84,26 @@ const courseServices = {
           APPWRITE_DATABASE_ID,
           APPWRITE_COURSE_ID,
           courseID
+        )
+      if (res) {
+        return res;
+      }
+    } catch (error: any) {
+      if ("message" in error) {
+        message.error(error.message);
+      }
+      return null;
+    }
+  },
+  upDateOneCourse: async (documentID: string, data: {}) => {
+    try {
+      const res = appwrite
+        .provider()
+        .database.updateDocument(
+          APPWRITE_DATABASE_ID,
+          APPWRITE_COURSE_ID,
+          documentID,
+          data
         )
       if (res) {
         return res;

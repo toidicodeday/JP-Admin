@@ -25,14 +25,14 @@ const lessonService = {
       return null;
     }
   },
-  getOneLesson: async (documentId: string) => {
+  getOneLesson: async (lessonID: string) => {
     try {
       const response = await appwrite
         .provider()
         .database.getDocument(
           APPWRITE_DATABASE_ID,
           APPWRITE_LESSON_ID,
-          documentId
+          lessonID
         );
       if (response) {
         console.log("response", response);
@@ -65,7 +65,7 @@ const lessonService = {
       return null;
     }
   },
-  deleteOneLesson: async (lessonID: any) => {
+  deleteOneLesson: async (lessonID: string) => {
     try {
       const res = appwrite
         .provider()
@@ -84,7 +84,7 @@ const lessonService = {
       return null;
     }
   },
-  updateOneLesson: async (lessonID: any, data: {}) => {
+  updateOneLesson: async (lessonID: string, data: {}) => {
     try {
       const res = appwrite
         .provider()

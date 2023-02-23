@@ -17,9 +17,12 @@ const Account = () => {
   const [avatar, setAvatar] = useState<string>();
   const [loadingAvatar, setLoadingAvatar] = useState(false);
 
+
+
   useEffect(() => {
     if (accountInfo?.prefs?.avatar) {
       const userAvatar = api.file.previewImage(accountInfo?.prefs?.avatar);
+      console.log("====>", accountInfo?.prefs?.avatar)
       setAvatar(userAvatar.href || accountImg);
     } else {
       setAvatar(accountImg);
@@ -42,7 +45,6 @@ const Account = () => {
   const onUpdateUserAvatar = async (file: File) => {
     setLoadingAvatar(true);
     const response = await api.file.uploadImage(file);
-
     if (response) {
       const responseAvatar = await api.auth.updateUserMePref({
         avatar: response.$id,
