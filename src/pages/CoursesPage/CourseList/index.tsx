@@ -65,7 +65,6 @@ const CourseList = () => {
     {
       title: "Course",
       dataIndex: "course",
-      width: 700,
       render: (text, record) => {
         return (
           <div className="flex gap-9">
@@ -82,6 +81,25 @@ const CourseList = () => {
         );
       },
     },
+    // {
+    //   title: "",
+    //   dataIndex: "course",
+    //   render: (text, record) => {
+    //     return (
+    //       <div className="flex gap-9">
+    //         {/* <img
+    //           className="w-52 h-32 object-contain"
+    //           src={record.img}
+    //           alt="course-img"
+    //         /> */}
+    //         <div>
+    //           <p className="font-bold text-lg mb-2">{record.name}</p>
+    //           <p className="font-normal text-lg">{record.desc}</p>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: "Cost",
       dataIndex: "cost",
