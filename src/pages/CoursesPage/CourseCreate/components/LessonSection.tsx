@@ -10,10 +10,27 @@ import removeImg from "../../../../assets/images/btn-remove.svg";
 import "../style.scss";
 import { CourseType, LessonType } from "@/services/commonType";
 import { ColumnsType } from "antd/es/table/interface";
+import { MenuOutlined } from '@ant-design/icons';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+
+
 
 type Props = {
   detailCourse: Models.Document | undefined;
 };
+
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  'data-row-key': string;
+}
 
 const LessonTab = ({ detailCourse }: Props) => {
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
@@ -32,12 +49,18 @@ const LessonTab = ({ detailCourse }: Props) => {
       setLessonLoading(true);
       const response = await api.lesson.getLessonList(detailCourse?.$id);
       if (response) {
-        setLessonData(response.documents);
+        setLessonData(
+          response.documents
+          // ?.map((item: LessonType) => ({ ...item, key: item?.$id }))
+          // ?.sort((a: LessonType, b: LessonType) => a?.sort - b?.sort)
+        );
         setLessonTotal(response.total);
       }
       setLessonLoading(false);
     }
   }, [detailCourse]);
+
+  console.log("lessonData", lessonData)
 
   useEffect(() => {
     getLessonList();
@@ -81,6 +104,7 @@ const LessonTab = ({ detailCourse }: Props) => {
       const newLesson = await api.lesson.createOneLesson({
         ...values,
         courseID: detailCourse?.$id,
+        sort: (lessonTotal + 1) * 1000000
       });
       console.log("newLesson", newLesson)
       if (newLesson) {
@@ -122,6 +146,9 @@ const LessonTab = ({ detailCourse }: Props) => {
 
   const columnsLesson: ColumnsType<LessonType> = [
     {
+      key: 'sort',
+    },
+    {
       title: "Lessons",
       dataIndex: "name",
     },
@@ -152,28 +179,121 @@ const LessonTab = ({ detailCourse }: Props) => {
     },
   ];
 
+  const RowLessonDrap = ({ children, ...props }: RowProps) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      setActivatorNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({
+      id: props['data-row-key'],
+    });
+
+    const style: React.CSSProperties = {
+      ...props.style,
+      transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+      transition,
+      ...(isDragging ? { position: 'relative', zIndex: 0 } : {}),
+    };
+
+    return (
+      <tr {...props} ref={setNodeRef} style={style} {...attributes}>
+        {React.Children.map(children, (child) => {
+          if ((child as React.ReactElement).key === 'sort') {
+            return React.cloneElement(child as React.ReactElement, {
+              children: (
+                <MenuOutlined
+                  ref={setActivatorNodeRef}
+                  style={{ touchAction: 'none', cursor: 'move' }}
+                  {...listeners}
+                />
+              ),
+            });
+          }
+          return child;
+        })}
+      </tr>
+    );
+  };
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+
+    if (active.id !== over?.id) {
+      setLessonData((previous) => {
+        const activeIndex = previous.findIndex((i) => i.$id === active.id);
+        const overIndex = previous.findIndex((i) => i.$id === over?.id);
+
+        console.log('activeIndex', activeIndex, 'overIndex', overIndex)
+
+        let preData = null
+        let nextData = null
+        let newSort = 0
+
+        const update = async (sort: number) => {
+          const res = await api.lesson.updateOneLesson(lessonData[activeIndex].$id, { sort })
+
+          console.log(res)
+        }
+
+        if (activeIndex > overIndex) {
+          preData = lessonData?.[overIndex - 1]
+          nextData = lessonData?.[overIndex]
+          newSort = ((preData?.sort || 0) + nextData?.sort) / 2;
+        }
+        else if (activeIndex < overIndex) {
+          preData = lessonData?.[overIndex]
+          nextData = lessonData?.[overIndex + 1]
+          newSort = (preData?.sort + (nextData?.sort || (lessonTotal + 1) * 1000000)) / 2;
+
+        }
+
+        console.log(newSort)
+        update(newSort).then(() => getLessonList())
+
+        return arrayMove(previous, activeIndex, overIndex);
+      });
+    }
+    console.log("====>", lessonData)
+  };
+
   return (
     <div className="lessons bg-white pb-52">
       <Row>
         <Col span={6}>
           <div className="lesson-left px-5 border-r-2">
-            <Table
-              columns={columnsLesson}
-              dataSource={lessonData}
-              loading={lessonLoading}
-              rowClassName={(record) => {
-                if (activeLessonID === record?.$id) {
-                  return "bg-[#bdc3c7] hover:bg-[#bdc3c7] row-active cursor-pointer";
-                } else {
-                  return "";
-                }
-              }}
-              onRow={(record, rowIndex) => ({
-                onClick: (event) => {
-                  setActiveLessonID(record.$id);
-                }, // click row
-              })}
-            />
+            <DndContext onDragEnd={onDragEnd}>
+              <SortableContext
+                items={lessonData.map((i) => i.$id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <Table
+                  components={{
+                    body: {
+                      row: RowLessonDrap,
+                    },
+                  }}
+                  rowKey="$id"
+                  columns={columnsLesson}
+                  dataSource={lessonData}
+                  loading={lessonLoading}
+                  rowClassName={(record) => {
+                    if (activeLessonID === record?.$id) {
+                      return "bg-[#bdc3c7] hover:bg-[#bdc3c7] row-active cursor-pointer";
+                    } else {
+                      return "";
+                    }
+                  }}
+                  onRow={(record, rowIndex) => ({
+                    onClick: (event) => {
+                      setActiveLessonID(record.$id);
+                    }, // click row
+                  })}
+                />
+              </SortableContext>
+            </DndContext>
             <Button
               onClick={showCreateLessonModal}
               className="w-full mt-3"

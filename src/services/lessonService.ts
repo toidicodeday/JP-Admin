@@ -14,6 +14,7 @@ const lessonService = {
         .provider()
         .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_LESSON_ID, [
           Query.equal("courseID", courseID),
+          Query.orderAsc('sort')
         ]);
       if (response) {
         return response;
