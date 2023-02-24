@@ -6,6 +6,7 @@ import { message } from "antd";
 import { ID, Models, Query } from "appwrite";
 import appwrite from "./appwriteClient";
 import { CourseType } from "./commonType";
+import { sendNoti } from "./sendNoti";
 
 const courseServices = {
   getCourseList: async ({
@@ -67,6 +68,7 @@ const courseServices = {
           data
         );
       if (res) {
+        // await sendNoti({ title: data.name, content: data.desc })
         return res;
       }
     } catch (error: any) {
