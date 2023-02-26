@@ -60,7 +60,6 @@ const LessonTab = ({ detailCourse }: Props) => {
     }
   }, [detailCourse]);
 
-  console.log("lessonData", lessonData)
 
   useEffect(() => {
     getLessonList();
@@ -84,7 +83,7 @@ const LessonTab = ({ detailCourse }: Props) => {
         formLesson.setFieldsValue({
           name: lessonDetail?.name,
         });
-        console.log("lessonName", lessonDetail?.name);
+
       }
     };
     getOneLesson();
@@ -106,7 +105,7 @@ const LessonTab = ({ detailCourse }: Props) => {
         courseID: detailCourse?.$id,
         sort: (lessonTotal + 1) * 1000000
       });
-      console.log("newLesson", newLesson)
+
       if (newLesson) {
         message.info("Create lesson successful");
         getLessonList();
@@ -179,7 +178,7 @@ const LessonTab = ({ detailCourse }: Props) => {
     },
   ];
 
-  const RowLessonDrap = ({ children, ...props }: RowProps) => {
+  const RowLessonDrag = ({ children, ...props }: RowProps) => {
     const {
       attributes,
       listeners,
@@ -226,8 +225,6 @@ const LessonTab = ({ detailCourse }: Props) => {
         const activeIndex = previous.findIndex((i) => i.$id === active.id);
         const overIndex = previous.findIndex((i) => i.$id === over?.id);
 
-        console.log('activeIndex', activeIndex, 'overIndex', overIndex)
-
         let preData = null
         let nextData = null
         let newSort = 0
@@ -249,14 +246,11 @@ const LessonTab = ({ detailCourse }: Props) => {
           newSort = (preData?.sort + (nextData?.sort || (lessonTotal + 1) * 1000000)) / 2;
 
         }
-
-        console.log(newSort)
         update(newSort).then(() => getLessonList())
 
         return arrayMove(previous, activeIndex, overIndex);
       });
     }
-    console.log("====>", lessonData)
   };
 
   return (
@@ -272,7 +266,7 @@ const LessonTab = ({ detailCourse }: Props) => {
                 <Table
                   components={{
                     body: {
-                      row: RowLessonDrap,
+                      row: RowLessonDrag,
                     },
                   }}
                   rowKey="$id"

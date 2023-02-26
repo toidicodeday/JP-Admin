@@ -11,7 +11,8 @@ const questionService = {
     getQuestionList: async (lessonID: string) => {
         try {
             const response = await appwrite.provider().database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_QUESTION_ID, [
-                Query.equal('lessonID', lessonID)
+                Query.equal('lessonID', lessonID),
+                Query.orderAsc('sort')
             ])
             if (response) {
                 return response
@@ -66,7 +67,7 @@ const questionService = {
             return null;
         }
     },
-    updateOneLesson: async (questionID: any, data: {}) => {
+    updateOneQuestion: async (questionID: any, data: {}) => {
         try {
             const response = await appwrite.provider().database.updateDocument(APPWRITE_DATABASE_ID, APPWRITE_QUESTION_ID, questionID, data)
             if (response) {
