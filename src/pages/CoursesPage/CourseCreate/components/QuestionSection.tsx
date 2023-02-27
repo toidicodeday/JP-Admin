@@ -129,7 +129,7 @@ const QuestionSection = ({ lessonID }: Props) => {
       }
     }
     if (modalQuestionType === 'edit') {
-      const newQuestion = await api.question.updateOneLesson(questionIDEdit, values)
+      const newQuestion = await api.question.updateOneQuestion(questionIDEdit, values)
       if (newQuestion) {
         message.info("Update question successful")
         getQuestionList(lessonID)
