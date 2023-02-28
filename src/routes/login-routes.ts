@@ -1,5 +1,6 @@
 import LoginPage from "@/pages/LoginPage";
-import MissPassLayout from "@/pages/LoginPage/components/MissPassLayout";
+import ForgotPassword from "@/pages/LoginPage/components/ForgotPassword";
+import ResetPassword from "@/pages/LoginPage/components/ResetPassword";
 import IRoute from "@/utils/helpers/route.helper";
 
 const routes: IRoute[] = [
@@ -16,10 +17,16 @@ const routes: IRoute[] = [
     component: LoginPage,
   },
   {
-    path: "/miss-pass",
-    key: "miss-pass",
-    name: "MissPass",
-    component: MissPassLayout
+    path: "/reset-password",
+    key: "reset-pass",
+    name: "resetPass",
+    component: ResetPassword
+  },
+  {
+    path: "/forgot-password",
+    key: "forgot-pass",
+    name: "forgotPass",
+    component: ForgotPassword
   }
 ];
 

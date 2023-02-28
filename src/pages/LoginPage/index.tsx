@@ -31,8 +31,8 @@ const LoginPage = (props: Props) => {
     }
   };
 
-  const handlMissPass = () => {
-    navigate("/miss-pass")
+  const handlForgotPassword = () => {
+    navigate("/forgot-password")
   }
   return (
     <div className="flex justify-center items-center h-screen">
@@ -60,7 +60,7 @@ const LoginPage = (props: Props) => {
           <Button
             className="float-right"
             type="link"
-            onClick={handlMissPass}
+            onClick={handlForgotPassword}
           >
             Forgot password?
           </Button>
