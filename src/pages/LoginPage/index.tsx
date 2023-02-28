@@ -6,9 +6,11 @@ import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
+
 type Props = {};
 
 const LoginPage = (props: Props) => {
+
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
 
@@ -29,6 +31,9 @@ const LoginPage = (props: Props) => {
     }
   };
 
+  const handlForgotPassword = () => {
+    navigate("/forgot-password")
+  }
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-96">
@@ -52,6 +57,13 @@ const LoginPage = (props: Props) => {
               }
             />
           </Form.Item>
+          <Button
+            className="float-right"
+            type="link"
+            onClick={handlForgotPassword}
+          >
+            Forgot password?
+          </Button>
           <Button type="primary" htmlType="submit" block>
             Login
           </Button>

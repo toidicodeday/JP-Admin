@@ -24,7 +24,7 @@ const authService = {
       .account.updateName(name)
       .then((res) => res)
       .catch((error) => {
-        message.error(error.message ||  DEFAULT_ERR_MESS);
+        message.error(error.message || DEFAULT_ERR_MESS);
       });
     return response;
   },
@@ -36,15 +36,30 @@ const authService = {
       message.error(error.message || DEFAULT_ERR_MESS);
     }
   },
-  updateUserMePassword: async (data: { password: string, oldPassword: string}) => {
-    try{
+  updateUserMePassword: async (data: { password: string, oldPassword: string }) => {
+    try {
       const response = await appwrite.provider().account.updatePassword(data.password, data.oldPassword)
       if (response) return response
-    } catch (error: any){
+    } catch (error: any) {
+      message.error(error.message || DEFAULT_ERR_MESS)
+    }
+  },
+  recoveryPassword: async (email: string, url: string) => {
+    try {
+      const response = await appwrite.provider().account.createRecovery(email, url)
+      if (response) return response
+    } catch (error: any) {
+      message.error(error.message || DEFAULT_ERR_MESS)
+    }
+  },
+  recoveryPasswordConfirm: async (userID: string, secret: string, password: string, rePassword: string) => {
+    try {
+      const response = await appwrite.provider().account.updateRecovery(userID, secret, password, rePassword)
+      if (response) return response
+    } catch (error: any) {
       message.error(error.message || DEFAULT_ERR_MESS)
     }
   }
-
 };
 
 export default authService;
