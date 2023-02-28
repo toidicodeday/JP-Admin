@@ -1,10 +1,9 @@
 import { Button, Input, message, Popconfirm, Table } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
-import editImg from "../../../assets/images/btn-edit.svg";
-import removeImg from "../../../assets/images/btn-remove.svg";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import editImg from "@images/btn-edit.svg";
+import removeImg from "@images/btn-remove.svg";
 import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import { Models } from "appwrite";
 import api from "@/services";
 import { CourseType } from "@/services/commonType";
 const { Search } = Input;
@@ -20,7 +19,7 @@ const CourseList = () => {
   const [pageSize, setPageSize] = useState(initPageSize);
   const [searchName, setSearchName] = useState("");
   const [loadingTable, setLoadingTable] = useState(false);
-
+  const isMounted = useRef(true);
   const confirmDelete = async (course: CourseType) => {
     const response = await api.course.deleteOneCourse(course.$id);
     if (response) {
@@ -36,6 +35,7 @@ const CourseList = () => {
       pageSize,
       searchName,
     });
+    if (!isMounted.current) return null;
     if (response) {
       setDataTable(response.documents);
       setTotalCourse(response.total);
@@ -44,20 +44,22 @@ const CourseList = () => {
   }, [pageNo, pageSize, searchName]);
 
   useEffect(() => {
+    isMounted.current = true;
     getDocuments();
+    return () => {
+      isMounted.current = false;
+    };
   }, [getDocuments]);
 
   const onSearch = (value: string) => {
-    // TODO [course list] missing search name
-
     setSearchName(value);
   };
 
-  const handleMoveCreate = () => {
+  const goToCreatePage = () => {
     navigate("/courses/courses-create");
   };
 
-  const handleMoveEdit = (record: any) => {
+  const goToEditPage = (record: any) => {
     navigate(`/courses/${record?.$id}`);
   };
 
@@ -69,7 +71,7 @@ const CourseList = () => {
         return (
           <div className="flex gap-9">
             <img
-              className="w-52 h-32 object-contain"
+              className="w-52 h-32 object-contain bg-slate-50 rounded-md"
               src={record.img}
               alt="course-img"
             />
@@ -81,28 +83,14 @@ const CourseList = () => {
         );
       },
     },
-    // {
-    //   title: "",
-    //   dataIndex: "course",
-    //   render: (text, record) => {
-    //     return (
-    //       <div className="flex gap-9">
-    //         {/* <img
-    //           className="w-52 h-32 object-contain"
-    //           src={record.img}
-    //           alt="course-img"
-    //         /> */}
-    //         <div>
-    //           <p className="font-bold text-lg mb-2">{record.name}</p>
-    //           <p className="font-normal text-lg">{record.desc}</p>
-    //         </div>
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       title: "Cost",
       dataIndex: "cost",
+      render: (v) => {
+        const cost = Number(v);
+        if (cost <= 0) return "FREE";
+        return "$" + v;
+      },
     },
     {
       title: "Interested",
@@ -114,7 +102,7 @@ const CourseList = () => {
         <div className="flex justify-end">
           <Button
             type="text"
-            onClick={() => handleMoveEdit(record)}
+            onClick={() => goToEditPage(record)}
             icon={<img src={editImg} alt="" />}
           />
           <Popconfirm
@@ -142,7 +130,7 @@ const CourseList = () => {
         />
       </div>
       <div className="py-5 pr-2 flex items-center justify-end bg-transparent">
-        <Button type="primary" onClick={() => handleMoveCreate()}>
+        <Button type="primary" onClick={goToCreatePage}>
           Create new
         </Button>
       </div>
@@ -154,7 +142,7 @@ const CourseList = () => {
           loading={loadingTable}
           pagination={{
             pageSize: pageSize,
-            defaultCurrent: 1,
+            defaultCurrent: initPageNo,
             total: totalCourse,
             onChange: (newPageNo, newPageSize) => {
               setPageNo(newPageNo);
@@ -162,7 +150,6 @@ const CourseList = () => {
             },
           }}
         />
-        ;
       </div>
     </div>
   );

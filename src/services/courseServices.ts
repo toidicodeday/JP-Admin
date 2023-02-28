@@ -27,7 +27,6 @@ const courseServices = {
           Query.offset((pageNo - 1) * pageSize),
           Query.orderDesc('$updatedAt')
         ]);
-      console.log("res", res);
       if (res) {
         return res;
       }
