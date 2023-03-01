@@ -42,7 +42,6 @@ const LayoutSidebar = (props: Props) => {
         className="text-white font-normal text-lg"
         theme="dark"
         selectedKeys={[activeMenuKey]}
-        inlineCollapsed={collapsed}
         mode="inline"
         items={menuItems}
       />

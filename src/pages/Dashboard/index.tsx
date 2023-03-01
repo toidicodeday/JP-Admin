@@ -1,6 +1,5 @@
 import api from "@/services";
-import { ArrowUpOutlined } from "@ant-design/icons";
-import { Card, Layout, Statistic } from "antd";
+import { Card, Statistic } from "antd";
 import { useEffect, useState } from "react";
 import bookLover from "@images/book-lover.png";
 
@@ -10,7 +9,7 @@ type Props = {
 
 const INIT_TOTAL = 0;
 
-const HomePage = (props: Props) => {
+const Dashboad = (props: Props) => {
   const [totalCourse, setTotalCourse] = useState(INIT_TOTAL);
   const [totalLesson, setTotalLesson] = useState(INIT_TOTAL);
   const [totalQuestion, setTotalQuestion] = useState(INIT_TOTAL);
@@ -43,4 +42,4 @@ const HomePage = (props: Props) => {
   );
 };
 
-export default HomePage;
+export default Dashboad;
