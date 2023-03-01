@@ -7,6 +7,7 @@ import CourseCreate from "@/pages/CoursesPage/CourseCreate";
 import { FaBook } from 'react-icons/fa';
 import { ImHome } from 'react-icons/im';
 import { MdAccountCircle } from 'react-icons/md';
+import UserPage from "@/pages/UserPage";
 
 
 const routes: IRoute[] = [
@@ -47,6 +48,13 @@ const routes: IRoute[] = [
     component: Account,
     icon: MdAccountCircle,
     hidden: true,
+  },
+  {
+    path: "/user",
+    key: "user",
+    name: "User Manager",
+    component: UserPage,
+    icon: MdAccountCircle,
   },
 ];
 
