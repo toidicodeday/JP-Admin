@@ -2,6 +2,7 @@ import api from "@/services";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { Card, Layout, Statistic } from "antd";
 import { useEffect, useState } from "react";
+import bookLover from "@images/book-lover.png";
 
 type Props = {
   //
@@ -34,6 +35,9 @@ const HomePage = (props: Props) => {
         <Card className="grow bg-pink-300">
           <Statistic title="Total question" value={totalQuestion} />
         </Card>
+      </div>
+      <div className="flex justify-center py-6">
+        <img className="w-96 h-96" src={bookLover} alt="DashboardImage" />
       </div>
     </div>
   );
