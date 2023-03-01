@@ -4,6 +4,7 @@ import {
 } from "@/utils/constants/service.constant";
 import { message } from "antd";
 import { ID, Models, Query } from "appwrite";
+import { isNumber } from "lodash";
 import appwrite from "./appwriteClient";
 import { CourseType } from "./commonType";
 import { sendNoti } from "./sendNoti";
@@ -25,7 +26,7 @@ const courseServices = {
           ...(searchName ? [Query.search("name", searchName)] : []),
           Query.limit(pageSize),
           Query.offset((pageNo - 1) * pageSize),
-          Query.orderDesc('$updatedAt')
+          Query.orderDesc("$updatedAt"),
         ]);
       if (res) {
         return res;
@@ -85,7 +86,7 @@ const courseServices = {
           APPWRITE_DATABASE_ID,
           APPWRITE_COURSE_ID,
           courseID
-        )
+        );
       if (res) {
         return res;
       }
@@ -105,7 +106,7 @@ const courseServices = {
           APPWRITE_COURSE_ID,
           documentID,
           data
-        )
+        );
       if (res) {
         return res;
       }
@@ -115,7 +116,19 @@ const courseServices = {
       }
       return null;
     }
-  }
+  },
+  getCourseTotal: async () => {
+    try {
+      const res: Models.DocumentList<CourseType> = await appwrite
+        .provider()
+        .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_COURSE_ID);
+      if (isNumber(res?.total)) return res.total;
+      return 0;
+    } catch (error: any) {
+      if ("message" in error) message.error(error.message);
+      return 0;
+    }
+  },
 };
 
 export default courseServices;

@@ -4,6 +4,7 @@ import {
 } from "@/utils/constants/service.constant";
 import { message } from "antd";
 import { ID, Models, Query } from "appwrite";
+import { isNumber } from "lodash";
 import appwrite from "./appwriteClient";
 import { LessonType } from "./commonType";
 
@@ -14,7 +15,7 @@ const lessonService = {
         .provider()
         .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_LESSON_ID, [
           Query.equal("courseID", courseID),
-          Query.orderAsc('sort')
+          Query.orderAsc("sort"),
         ]);
       if (response) {
         return response;
@@ -96,7 +97,7 @@ const lessonService = {
           data
         );
       if (res) {
-        return res
+        return res;
       }
     } catch (error: any) {
       if ("message" in error) {
@@ -104,7 +105,19 @@ const lessonService = {
       }
       return null;
     }
-  }
+  },
+  getLessonTotal: async () => {
+    try {
+      const response: Models.DocumentList<LessonType> = await appwrite
+        .provider()
+        .database.listDocuments(APPWRITE_DATABASE_ID, APPWRITE_LESSON_ID);
+      if (isNumber(response?.total)) return response.total;
+      return 0;
+    } catch (error: any) {
+      if ("message" in error) message.error(error.message);
+      return 0;
+    }
+  },
 };
 
 export default lessonService;
