@@ -22,3 +22,11 @@ export type QuestionType = {
   type: string
   answers: string
 } & Models.Document
+
+export type UserType = {
+  name: string
+  email: string
+  role: string
+  avatar: string
+  des: string
+} 
