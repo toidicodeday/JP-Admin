@@ -20,6 +20,7 @@ const Dashboad = (props: Props) => {
     api.course.getCourseTotal().then(setTotalCourse);
     api.lesson.getLessonTotal().then(setTotalLesson);
     api.question.getQuestionTotal().then(setTotalQuestion);
+
   }, []);
 
   return (

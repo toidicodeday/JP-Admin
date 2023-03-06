@@ -25,7 +25,7 @@ const CourseCreate = () => {
           setDetailCourse(response);
         }
         setIsLoading(false);
-      } else if (documentId === "course-create") {
+      } else if (documentId === "courses-create") {
         setIsDisableLessonTab(true);
       }
     };

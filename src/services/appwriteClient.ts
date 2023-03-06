@@ -1,6 +1,7 @@
 import { APPWRITE_DATABASE_ID, APPWRITE_ENDPOINT, APPWRITE_PROJECT } from "@/utils/constants/service.constant";
 import { Account, Client, Databases, Storage, Teams } from "appwrite";
 
+
 type Nullable<T> = { [K in keyof T]: T[K] | null };
 
 type SDK_APPWRITE = {
@@ -17,6 +18,8 @@ const severInfo = {
   databaseID: APPWRITE_DATABASE_ID,
 };
 
+
+
 let appwrite = {
   sdk: {
     database: null,
@@ -24,6 +27,7 @@ let appwrite = {
     client: null,
     storage: null,
     teams: null,
+    users: null
   } as Nullable<SDK_APPWRITE>,
   provider: (): SDK_APPWRITE => {
     if (appwrite.sdk.client) {

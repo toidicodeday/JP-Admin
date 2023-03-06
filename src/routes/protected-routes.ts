@@ -2,12 +2,13 @@ import Dashboard from "@/pages/Dashboard";
 import CourseList from "@/pages/CoursesPage/CourseList";
 import Account from "@/pages/Account";
 import IRoute from "@/utils/helpers/route.helper";
-// import { HomeOutlined } from "@ant-design/icons";
 import CourseCreate from "@/pages/CoursesPage/CourseCreate";
 import { FaBook } from 'react-icons/fa';
 import { ImHome } from 'react-icons/im';
 import { MdAccountCircle } from 'react-icons/md';
-import UserPage from "@/pages/UserPage";
+import TeamPage from "@/pages/TeamPage";
+import Admin from "@/pages/TeamPage/components/Members";
+import Members from "@/pages/TeamPage/components/Members";
 
 
 const routes: IRoute[] = [
@@ -50,11 +51,29 @@ const routes: IRoute[] = [
     hidden: true,
   },
   {
-    path: "/user",
-    key: "user",
-    name: "User Manager",
-    component: UserPage,
+    path: "/team",
+    key: "team",
+    name: "Team Manager",
+    component: TeamPage,
     icon: MdAccountCircle,
+    children: [
+      {
+        path: "/member",
+        key: "member",
+        name: "Member",
+        component: Members,
+        hidden: true,
+        children: [
+          {
+            path: "/:id",
+            key: "admin member",
+            name: "Admin member",
+            component: Admin,
+            hidden: true,
+          }
+        ]
+      },
+    ],
   },
 ];
 
