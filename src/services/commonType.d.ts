@@ -24,9 +24,11 @@ export type QuestionType = {
 } & Models.Document
 
 export type UserType = {
+  userName: string
+  teamName: string
+}
+
+export type TeamType = {
   name: string
-  email: string
-  role: string
-  avatar: string
-  des: string
-} 
+  total: number
+} & Models.Team
