@@ -88,22 +88,22 @@ const TeamPage = () => {
             dataIndex: 'action',
             render: (text, record) => (
                 <div className="flex gap-2">
-                    <Button
+                    {/* <Button
                         type="text"
                         icon={<BsFillTrashFill />}
                         onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteTeam(record);
                         }}
-                    />
-                    <Button
+                    /> */}
+                    {/* <Button
                         type='text'
                         icon={<AiFillEdit />}
                         onClick={(e) => {
                             e.stopPropagation();
                             handleEditTeam(record);
                         }}
-                    />
+                    /> */}
                 </div>
             )
         }
@@ -134,9 +134,9 @@ const TeamPage = () => {
                 />
             </div>
             <div className="py-5 pr-2 flex items-center justify-end gap-3 bg-transparent">
-                <Button type="primary" onClick={showTeamModal}>
+                {/* <Button type="primary" onClick={showTeamModal}>
                     Create new team
-                </Button>
+                </Button> */}
                 <Modal
                     okButtonProps={{ htmlType: "submit" }}
                     okText={"ok"}

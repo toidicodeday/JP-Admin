@@ -1,9 +1,10 @@
 import api from '@/services';
 import { UserType } from '@/services/commonType';
-import { Button, Form, Input, Modal, Table } from 'antd';
+import { DEFAULT_ERR_MESS } from '@/utils/constants/message.constant';
+import { Button, Form, Input, message, Modal, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { el } from 'date-fns/locale';
 import React, { useCallback, useEffect, useState } from 'react';
+import { AiFillEdit } from 'react-icons/ai';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
 
@@ -12,6 +13,8 @@ const Members = () => {
     const [isMemberModalOpen, setIsMemberModalOpen] = useState(false)
     const [memberData, setMemberData] = useState<UserType[]>([])
     const [teamID, setTeamID] = useState('')
+    const [memberID, setMemberID] = useState('')
+    const [memberType, setMemberType] = useState<'add' | 'edit'>('add')
     const location = useLocation()
     const [formMember] = Form.useForm();
 
@@ -27,7 +30,10 @@ const Members = () => {
             if (teamID) {
                 const res = await api.team.getMemberList(teamID)
                 if (res) {
+                    console.log(res)
                     setMemberData(res.memberships)
+                } else {
+                    message.error('No data to display' || DEFAULT_ERR_MESS);
                 }
             }
         },
@@ -45,6 +51,21 @@ const Members = () => {
         }
     }
 
+    const handleEditMember = async (values: any) => {
+        setMemberType('edit')
+        setMemberID(values.$id)
+        setIsMemberModalOpen(true)
+        const res = await api.team.getMember(values.teamId, values.$id)
+        if (res) {
+            formMember.setFieldsValue({
+                email: values?.userEmail,
+                name: values?.userName,
+                role: values?.roles
+            })
+        }
+
+    }
+
     const columns: ColumnsType<UserType> = [
 
         {
@@ -53,7 +74,10 @@ const Members = () => {
         },
         {
             title: "Role",
-            dataIndex: "teamName",
+            dataIndex: "roles",
+            render: (text) => (
+                <div className="">{text}</div>
+            )
         },
         {
             title: '',
@@ -68,22 +92,42 @@ const Members = () => {
                             handleDeleteMember(record);
                         }}
                     />
+                    <Button
+                        type='text'
+                        icon={<AiFillEdit />}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditMember(record);
+                        }}
+                    />
                 </div>
             )
         }
     ];
 
     const showMemberModal = () => {
+        setMemberType('add')
         setIsMemberModalOpen(true)
         formMember.resetFields()
     }
 
     const handleMemberSubmit = async (values: any) => {
-        const res = await api.team.createMembership(teamID, values.email, [], `http://localhost:5173`)
-        if (res) {
-            console.log("membership res", res)
-            getMemberList()
-            setIsMemberModalOpen(false)
+        console.log("===>", values)
+        setIsMemberModalOpen(false)
+        const roles = values.role.split(", ")
+        if (memberType === 'add') {
+            const res = await api.team.createMembership(teamID, values.email, roles, `http://localhost:5173`)
+            if (res) {
+                console.log("membership res", res)
+                getMemberList()
+            }
+        }
+        else {
+            const res = await api.team.updateMemberRole(teamID, memberID, roles)
+            if (res) {
+                console.log("edit res", res)
+                getMemberList()
+            }
         }
     }
     const handleMemberOk = () => {
@@ -109,12 +153,12 @@ const Members = () => {
                 </Button>
                 <Modal
                     okButtonProps={{ htmlType: "submit" }}
-                    okText={"Add"}
+                    okText={memberType === 'add' ? 'add' : 'save'}
                     className="w-[684px]"
                     open={isMemberModalOpen}
                     onOk={handleMemberOk}
                     onCancel={handleMemberCancel}
-                    title="Add new member"
+                    title={memberType === 'add' ? 'Add new member' : 'Edit member'}
                 >
                     <Form
                         layout='vertical'
