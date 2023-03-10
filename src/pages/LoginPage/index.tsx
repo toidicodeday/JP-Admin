@@ -3,23 +3,28 @@ import { useTypedDispatch } from "@/store";
 import { saveLoggedInInfo } from "@/store/authSlice";
 import { REQUIRE_MESS } from "@/utils/constants/message.constant";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 type Props = {};
 
 const LoginPage = (props: Props) => {
-
+  const [form] = Form.useForm()
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async (values: any) => {
+    setLoading(true)
+
     const loginRes = await api.auth.login({
       email: values.email,
       password: values.password,
     });
 
+    // const checkTeamUser = false
     if (loginRes) {
       await dispatch(
         saveLoggedInInfo({
@@ -28,7 +33,12 @@ const LoginPage = (props: Props) => {
         })
       );
       navigate("/");
+
     }
+    // else {
+    //   form.resetFields()
+    // }
+    setLoading(false)
   };
 
   const handlForgotPassword = () => {
@@ -39,6 +49,7 @@ const LoginPage = (props: Props) => {
       <div className="w-96">
         <p className="mb-5 text-4xl font-bold text-center">Login to JP Admin</p>
         <Form
+          form={form}
           validateMessages={{ required: REQUIRE_MESS }}
           layout="vertical"
           onFinish={handleLogin}
@@ -49,7 +60,7 @@ const LoginPage = (props: Props) => {
           <Form.Item
             name="password"
             label="Password"
-            rules={[{ required: true }]}
+            rules={[{ required: true }, { min: 8 }]}
           >
             <Input.Password
               iconRender={(visible) =>
@@ -64,7 +75,7 @@ const LoginPage = (props: Props) => {
           >
             Forgot password?
           </Button>
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block loading={loading}>
             Login
           </Button>
         </Form>

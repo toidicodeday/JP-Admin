@@ -33,6 +33,15 @@ const teamService = {
             const res = await appwrite.provider().teams.listMemberships(teamID)
             if (res) return res
         } catch (error: any) {
+            // message.error(error.message || DEFAULT_ERR_MESS);
+        }
+    },
+
+    getMember: async (teamID: string, memberID: string) => {
+        try {
+            const res = await appwrite.provider().teams.getMembership(teamID, memberID)
+            if (res) return res
+        } catch (error: any) {
             message.error(error.message || DEFAULT_ERR_MESS);
         }
     },
@@ -89,18 +98,16 @@ const teamService = {
             message.error(error.message || DEFAULT_ERR_MESS);
         }
     },
-    getTotalMember: async (teamID: string) => {
+    updateMemberRole: async (teamID: string, memberID: string, roles: []) => {
         try {
-            const res = await appwrite
-                .provider()
-                .teams.listMemberships(teamID);
-            if (isNumber(res?.total)) return res.total;
-            return 0;
+            const res = await appwrite.provider().teams.updateMembershipRoles(teamID, memberID, roles)
+            if (res) {
+                return res
+            }
         } catch (error: any) {
-            if ("message" in error) message.error(error.message);
-            return 0;
+            message.error(error.message || DEFAULT_ERR_MESS);
         }
-    }
+    },
 };
 
 export default teamService;

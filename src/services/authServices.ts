@@ -1,5 +1,6 @@
 import { DEFAULT_ERR_MESS } from "@/utils/constants/message.constant";
 import { message } from "antd";
+import api from ".";
 import appwrite from "./appwriteClient";
 
 const authService = {
@@ -7,7 +8,30 @@ const authService = {
     const response = appwrite
       .provider()
       .account.createEmailSession(payload.email, payload.password)
-      .then((res) => res)
+      .then(async (loginRes) => {
+        const userIDLogin = loginRes.userId
+        const checkUserID = async () => {
+          const teamListRes = await api.team.getTeamList()
+          if (teamListRes) {
+            var teamsID = teamListRes.teams.filter(team => (team.name === 'admin' || team.name === 'super admin')).map(item => item.$id)
+            var teamRes = teamsID.map(async teamID => await api.team.getMemberList(teamID))
+            if (teamRes) {
+              if (teamRes.length !== 0) {
+                return teamRes.map(item => Promise.resolve(item).then(value => value?.memberships.some(member => member.userId === userIDLogin)))
+              } else {
+                return false
+              }
+            }
+          }
+
+        }
+        if (await checkUserID() === false) {
+          message.error("you do not have permission to access this website!")
+        }
+        if (await checkUserID()) {
+          return loginRes
+        }
+      })
       .catch((err) => {
         message.error(err.message);
         return null;

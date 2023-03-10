@@ -1,2 +1,2 @@
-export const REQUIRE_MESS = "Trường này không được trống";
-export const DEFAULT_ERR_MESS = 'Unknown errror'
+export const REQUIRE_MESS = "This field cannot be left blank";
+export const DEFAULT_ERR_MESS = 'Unknown error'
