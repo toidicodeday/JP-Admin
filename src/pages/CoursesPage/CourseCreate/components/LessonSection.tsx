@@ -264,6 +264,7 @@ const LessonTab = ({ detailCourse }: Props) => {
                 strategy={verticalListSortingStrategy}
               >
                 <Table
+
                   components={{
                     body: {
                       row: RowLessonDrag,

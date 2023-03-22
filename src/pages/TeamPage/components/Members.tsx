@@ -6,7 +6,7 @@ import { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsFillTrashFill } from 'react-icons/bs';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const Members = () => {
@@ -17,6 +17,7 @@ const Members = () => {
     const [memberType, setMemberType] = useState<'add' | 'edit'>('add')
     const location = useLocation()
     const [formMember] = Form.useForm();
+    const navigate = useNavigate()
 
     useEffect(() => {
         const id = location.pathname.replace('/team/member/', '')
@@ -138,16 +139,23 @@ const Members = () => {
         setIsMemberModalOpen(false)
     }
 
+    const handleBack = () => {
+        navigate('/team')
+    }
+
     return (
         <div className='pt-6 px-8 pb-10'>
             <div className="p-6 bg-white flex items-center">
                 <Input
                     className="w-60"
-                    placeholder="Search name"
+                    placeholder="Search user name"
                     allowClear
                 />
             </div>
-            <div className="py-5 flex justify-end">
+            <div className="py-5 flex justify-between">
+                <Button type="primary" onClick={handleBack}>
+                    Back
+                </Button>
                 <Button type="primary" onClick={showMemberModal}>
                     Add member
                 </Button>

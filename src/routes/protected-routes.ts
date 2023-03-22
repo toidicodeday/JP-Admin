@@ -5,10 +5,13 @@ import IRoute from "@/utils/helpers/route.helper";
 import CourseCreate from "@/pages/CoursesPage/CourseCreate";
 import { FaBook } from 'react-icons/fa';
 import { ImHome } from 'react-icons/im';
+import { HiUserGroup } from 'react-icons/hi';
 import { MdAccountCircle } from 'react-icons/md';
 import TeamPage from "@/pages/TeamPage";
 import Admin from "@/pages/TeamPage/components/Members";
 import Members from "@/pages/TeamPage/components/Members";
+import UserPage from "@/pages/UserPage";
+import UserAction from "@/pages/UserPage/UserAction";
 
 
 const routes: IRoute[] = [
@@ -55,7 +58,7 @@ const routes: IRoute[] = [
     key: "team",
     name: "Team Manager",
     component: TeamPage,
-    icon: MdAccountCircle,
+    icon: HiUserGroup,
     children: [
       {
         path: "/member",
@@ -75,6 +78,22 @@ const routes: IRoute[] = [
       },
     ],
   },
+  {
+    path: "/users",
+    key: "users",
+    name: "User Manager",
+    component: UserPage,
+    icon: MdAccountCircle,
+    children: [
+      {
+        path: "/:id",
+        key: "user action",
+        name: "User Action",
+        component: UserAction,
+        hidden: true
+      }
+    ]
+  }
 ];
 
 export default routes;
