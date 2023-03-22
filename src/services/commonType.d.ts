@@ -23,12 +23,11 @@ export type QuestionType = {
   answers: string
 } & Models.Document
 
-export type UserType = {
-  userName: string
-  teamName: string
-}
-
 export type TeamType = {
   name: string
   total: number
 } & Models.Team
+
+export type UserType = {
+  name: string
+} & Models.DocumentList
