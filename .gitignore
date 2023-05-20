@@ -27,3 +27,6 @@ dist
 dist-ssr
 .eslintcache
 .vercel
+
+# Local Netlify folder
+.netlify

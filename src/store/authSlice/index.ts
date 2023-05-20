@@ -6,6 +6,7 @@ import { STORAGE } from "@/utils/constants/storage.constant";
 import { Models } from "appwrite";
 
 const initialState: AuthState = {
+  userMe: null,
   sessionId: null,
   userId: null,
 };
